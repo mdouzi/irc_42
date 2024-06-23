@@ -14,6 +14,7 @@ class client {
         std::string servername;
         std::string nickname;
         bool Alreadyregistred;
+        bool Alreadyregistred2;
         bool isAuthenticated;
     public:
         client();
@@ -25,6 +26,7 @@ class client {
        void setUserName(std::string const & str);
         void setAuth(bool of);
         void setReg(bool of);
+        void setReg2(bool of);
         void setClientFd(int fd);
 
         std::string const &getNickName();
@@ -32,8 +34,12 @@ class client {
         std::string const &getHostName();
         std::string const &getServerName();
         std::string const &getUserName();
+
+        void sendMessageToClient(client client, std::string const & msg);
+
         bool getAuth();
         bool getReg();
+        bool getReg2();
         int getClientFd();
 
 };

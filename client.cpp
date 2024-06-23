@@ -8,6 +8,7 @@ client::client()
       servername(""), 
       nickname(""),  
       Alreadyregistred(false), 
+      Alreadyregistred2(false),
       isAuthenticated(false) {}
 
 client::~client() {}
@@ -38,6 +39,10 @@ void client::setUserName(std::string const & str) {
 
 void client::setAuth(bool of) {
     isAuthenticated = of;
+}
+
+void client::setReg2(bool of) {
+    Alreadyregistred2 = of;
 }
 
 void client::setReg(bool of) {
@@ -72,6 +77,16 @@ bool client::getReg() {
     return Alreadyregistred;
 }
 
+bool client::getReg2() {
+    return Alreadyregistred2;
+}
+
 int client::getClientFd() {
     return client_fd;
+}
+
+void client::sendMessageToClient(client client, std::string const & msg) {
+    my_server server;
+    std::string message = client.getNickName() + " " + msg;
+    server.send_reply(client.getClientFd(), message);
 }

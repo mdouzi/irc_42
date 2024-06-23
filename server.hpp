@@ -9,20 +9,23 @@
 #include <iostream>
 #include <stdio.h>
 #include <cstdlib>
-#include "./client.hpp"
+#include "client.hpp"
+#include "Channel.hpp"
 
 #define MAX_CLIENTS 4096
 
 
 
 class client;
+class Channel;
 
 class my_server {
 	private:
 		std::vector<pollfd> _mypolls;
-    std::map<int, bool> _disconnectedClients;
+            std::map<int, bool> _disconnectedClients;
 	public:
       std::vector<client> clients;
+      std::vector<Channel> channels;
       std::vector<std::string> input;
       my_server();
       ~my_server();

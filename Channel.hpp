@@ -33,12 +33,15 @@ class Channel {
       void setName(std::string const & str);
       void setTopic(std::string const & str);
       void setPassword(std::string const & str);
-      
 
-      void addClientToChannel(client newClient);
+      void sendMessageToChannel(my_server server, std::string message);
+      void receiveMessage(std::string const & message);
+
+
+      void addClientToChannel(const client newClient);
       bool isOperator(client newClient);
       void deleteClientFromChannel(client newClient);
-      bool isClientcInChannel(std::stering name);
+      bool isClientcInChannel(std::string name);
       void broadcast(std::string message);
 };
 
