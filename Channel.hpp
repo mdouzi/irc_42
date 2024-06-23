@@ -18,6 +18,8 @@ class Channel {
       std::vector<client> invited;
   public:
       Channel();
+      Channel(std::string name, std::string topic, client op, std::string password);
+      Channel(std::string name, std::string topic);
       ~Channel();
       std::string const & getName() const;
       std::string const & getTopic() const;
@@ -34,8 +36,10 @@ class Channel {
       
 
       void addClientToChannel(client newClient);
+      bool isOperator(client newClient);
       void deleteClientFromChannel(client newClient);
       bool isClientcInChannel(std::stering name);
+      void broadcast(std::string message);
 };
 
 
