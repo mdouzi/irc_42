@@ -91,14 +91,14 @@ void Channel::sendMessageToChannel(my_server server, std::string message) {
 
 
 // Check if a client is an operator
-// bool Channel::isOperator(client newClient) {
-//     for (size_t i = 0; i < operators.size(); ++i) {
-//         if (operators[i] == newClient) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+ bool Channel::isOperator(client newClient) {
+     for (size_t i = 0; i < operators.size(); ++i) {
+         if (operators[i] == newClient) {
+           return true;
+         }
+     }
+     return false;
+}
 
 // Remove client from users vector
  void Channel::deleteClientFromChannel(client newClient) {
@@ -111,18 +111,18 @@ void Channel::sendMessageToChannel(my_server server, std::string message) {
  }
 
 // Check if a client (by name) is in the channel
-// bool Channel::isClientcInChannel(std::string name) {
-//     for (size_t i = 0; i < users.size(); ++i) {
-//         if (users[i].getName() == name) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+ bool Channel::isClientcInChannel(std::string name) {
+     for (size_t i = 0; i < users.size(); ++i) {
+         if (users[i].getName() == name) {
+             return true;
+         }
+     }
+     return false;
+ }
 
 // // Broadcast a message to all clients in the channel
-// void Channel::broadcast(std::string message) {
-//     for (size_t i = 0; i < users.size(); ++i) {
-//         users[i].receiveMessage(message);
-//     }
-// }
+ void Channel::broadcast(std::string message) {
+     for (size_t i = 0; i < users.size(); ++i) {
+         users[i].receiveMessage(message);
+     }
+}

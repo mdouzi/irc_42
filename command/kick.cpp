@@ -63,9 +63,33 @@ std::vector<std::string> parseKickCommand(const std::string& message)
     return args;
 }
 
-
-void kick(my_server const &server) 
+int getChannel(std::vector<Channel> const & channels, std::string const &ChannelName)
 {
+  int i = 0;
+  while(channels[i])
+  {
+    if(channels[i].getName() == ChannelName)
+        return i;
+    i++;
+  }
+  return -1;
+}
+
+int getClient(std::vector<client> const &clients, std::string const &clientName)
+{
+  int i = 0;
+  while(clients[i])
+  {
+    if(clients[i].getNickName() == clientName)
+      return i;
+    i++;
+  }
+  return -1;
+}
+
+void kick(my_server const &server, int index) 
+{
+  int i;
   std::string channelName;
   std::string userName;
   std::string reason;
@@ -74,11 +98,14 @@ void kick(my_server const &server)
   user = args[1];
   reason = args[2];
 
+
   if(!findChannel(server, channelName)) 
       return;
   if(!findUser(server, userName))
       return;
-
-
-
+  else {
+    i = getChannel(server.Channels, channelName);
+    server.channels[i].deleteClientFromChannel(getClient(server.clients, userName));
+    server.channels[i],broadcast("client hase been removed");
+  }
 }

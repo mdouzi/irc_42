@@ -132,6 +132,9 @@ void my_server::handleClientCommands(int cfd, int index)
       send_reply(cfd, "PRIVMSG : ERR_NOTREGISTERED :You have not registered");
     }
   }
+  else if(this->input[0] == "KICK") {
+    if()
+  }
   // else if (this->input[0] == "MODE") {
   //   if (this->clients[index].getAuth() == true) {
   //     if (this->clients[index].getReg2() == true) {
