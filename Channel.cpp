@@ -27,6 +27,11 @@ std::string const & Channel::getName() const {
     return name;
 }
 
+// Getter for mode
+std::string const & Channel::getMode() const {
+    return mode;
+}
+
 // Getter for topic
 std::string const & Channel::getTopic() const {
     return topic;
@@ -67,6 +72,12 @@ void Channel::setPassword(std::string const & str) {
     password = str;
 }
 
+// Setter for mode
+void Channel::setMode(std::string const & str) {
+    mode = str;
+    ChannelsMode(server, index);
+}
+
 // Add client to users vector
 void Channel::addClientToChannel(client newClient) {
     users.push_back(newClient);
@@ -77,6 +88,7 @@ void Channel::sendMessageToChannel(my_server server, std::string message) {
         server.send_reply(users[i].getClientFd(), message);
     }
 }
+
 
 // Check if a client is an operator
 // bool Channel::isOperator(client newClient) {

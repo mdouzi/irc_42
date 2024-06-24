@@ -2,12 +2,13 @@
 
 void privmsg(my_server& server, int index) {
     bool found = false;
+    int idx = 0;
     if (server.input.size() < 3) {
         server.send_reply(server.clients[index].getClientFd(), "PRIVMSG : ERR_NEEDMOREPARAMS :Not enough parameters");
         return;
     } else if (server.input.size() >= 3) {
         std::string receiver = server.input[1];
-        std::string message;
+        std::string message = server.clients[index].getNickName() + "SENDING MESSAGE TO CHANNEL ";
         for (size_t i = 2; i < server.input.size(); i++) {
             message += server.input[i];
         }
@@ -20,9 +21,9 @@ void privmsg(my_server& server, int index) {
                 }
             }
             if (found) {
-                server.channels[index].sendMessageToChannel(server, message);
+                server.channels[idx].sendMessageToChannel(server, message);
                 std::cout << "PRIVMSG command executed" << std::endl;
-                std::cout << "Client " << server.clients[index].getClientFd() << " sent message to channel " << server.channels[index].getName() << std::endl;
+                std::cout << "Client " << server.clients[index].getClientFd() << " sent message to channel " << server.channels[idx].getName() << std::endl;
             } else {
                 server.send_reply(server.clients[index].getClientFd(), "PRIVMSG : ERR_NOSUCHCHANNEL :No such channel");
             }

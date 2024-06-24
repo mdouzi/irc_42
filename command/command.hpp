@@ -14,4 +14,6 @@ void user(my_server& server, int index);
 void nick(my_server& server, int index);
 void join(my_server& server, int index);
 void privmsg(my_server& server, int index);
+void mode(my_server& server, int index);
+void ChannelMode(my_server& server, int index);
 #endif 
