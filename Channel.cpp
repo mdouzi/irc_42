@@ -101,14 +101,14 @@ void Channel::sendMessageToChannel(my_server server, std::string message) {
 // }
 
 // Remove client from users vector
-// void Channel::deleteClientFromChannel(client newClient) {
-//     for (size_t i = 0; i < users.size(); ++i) {
-//         if (users[i] == newClient.getUserName()) {
-//             users.erase(users.begin() + i);
-//             break;
-//         }
-//     }
-// }
+ void Channel::deleteClientFromChannel(client newClient) {
+     for (size_t i = 0; i < users.size(); ++i) {
+         if (users[i].getNickName() == newClient.getNickName()) {
+             users.erase(users.begin() + i);
+             break;
+         }
+     }
+ }
 
 // Check if a client (by name) is in the channel
 // bool Channel::isClientcInChannel(std::string name) {
