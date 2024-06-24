@@ -25,7 +25,7 @@ class Channel {
         std::string const & getName() const;
         std::string const & getTopic() const;
         std::string const & getPassword() const;
-        std::string const & getMode() const;
+       std::string const & getMode() const;
         
         std::vector<client> const &getUsers() const;
         std::vector<client> const &getoperators() const;
@@ -35,7 +35,7 @@ class Channel {
         void setName(std::string const & str);
         void setTopic(std::string const & str);
         void setPassword(std::string const & str);
-        void setMode(std::string const & str);
+      //   void setMode(std::string const & str);
 
         void sendMessageToChannel(my_server server, std::string message);
         void receiveMessage(std::string const & message);

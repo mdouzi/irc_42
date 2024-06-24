@@ -73,10 +73,10 @@ void Channel::setPassword(std::string const & str) {
 }
 
 // Setter for mode
-void Channel::setMode(std::string const & str) {
-    mode = str;
-    ChannelsMode(server, index);
-}
+// void Channel::setMode(std::string const & str) {
+//     mode = str;
+//     ChannelsMode(server, index);
+// }
 
 // Add client to users vector
 void Channel::addClientToChannel(client newClient) {
