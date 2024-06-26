@@ -18,17 +18,20 @@ void join(my_server& server, int index) {
                     break;
                 }
             }
-            if (found) {
+            if (found && server.channels[idx].isInviteOn() == true) {
+                server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_INVITEONLYCHAN :Cannot join channel (+i)");
+                return;
+            } else if (found) {
                 server.channels[idx].addClientToChannel(server.clients[index]);
                 std::cout << server.channels[idx].getName() << std::endl;
                 server.send_reply(server.clients[index].getClientFd(), "JOIN :You have joined the channel");
                 std::cout << "Channel name: " << server.channels[idx].getName() << std::endl;
                 std::cout << "Client " << server.clients[index].getNickName() << " joined channel " << server.channels[idx].getName() << std::endl;
-            }
-            else {
+            } else {
                 server.channels.push_back(Channel(channelName, ""));
                 server.channels[server.channels.size() - 1].addClientToChannel(server.clients[index]);
                 server.channels[server.channels.size() - 1].setName(channelName);
+                server.channels[idx].addOperator(server.clients[index]);
                 server.send_reply(server.clients[index].getClientFd(), "JOIN :You have joined the channel");
                 std::cout << "Channel name: " << server.channels[idx].getName() << std::endl;
                 std::cout << "Client " << server.clients[index].getNickName() << " joined channel " << server.channels[idx].getName() << std::endl;

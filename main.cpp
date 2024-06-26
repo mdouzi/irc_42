@@ -1,11 +1,10 @@
 #include "server.hpp"
 
 int main(int argc, char **argv) {
-    if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <port>\n";
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <port> <password>\n";
         return 1;
     }
-
      wint_t port;
     try {
         port = static_cast<wint_t>(atoi(argv[1]));
@@ -18,6 +17,7 @@ int main(int argc, char **argv) {
     }
     my_server a;
 
+    a.setPassword(argv[2]);
     a.runServer(port);
     return 0;
 }

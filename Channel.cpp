@@ -22,14 +22,14 @@ Channel::~Channel() {
     // Clean up if needed
 }
 
-// Getter for name
-std::string const & Channel::getName() const {
-    return name;
-}
-
 // Getter for mode
 std::string const & Channel::getMode() const {
     return mode;
+}
+
+// Getter for name
+std::string const & Channel::getName() const {
+    return name;
 }
 
 // Getter for topic
@@ -47,14 +47,25 @@ std::vector<client> const & Channel::getUsers() const {
     return users;
 }
 
-// Getter for operators vector
-std::vector<client> const & Channel::getoperators() const {
-    return operators;
-}
-
 // Getter for invited clients vector
 std::vector<client> const & Channel::getInvitedClients() const {
     return invited;
+}
+
+// setter for Limited
+void Channel::setLimited(bool isLimited, int limit) {
+    _isLimited = isLimited;
+    _limit = limit;
+}
+
+// setter for TopicRestricted
+void Channel::setTopicRestricted(bool isTopicRestricted) {
+    _isTopicRestricted = isTopicRestricted;
+}
+
+// setter for InviteOnly
+void Channel::setInviteOnly(bool isInviteOnly) {
+    _isInviteOnly = isInviteOnly;
 }
 
 // Setter for name
@@ -72,12 +83,6 @@ void Channel::setPassword(std::string const & str) {
     password = str;
 }
 
-// Setter for mode
-// void Channel::setMode(std::string const & str) {
-//     mode = str;
-//     ChannelsMode(server, index);
-// }
-
 // Add client to users vector
 void Channel::addClientToChannel(client newClient) {
     users.push_back(newClient);
@@ -89,40 +94,69 @@ void Channel::sendMessageToChannel(my_server server, std::string message) {
     }
 }
 
+// remove operator
+void Channel::removeOperator(client newClient) {
+    for (size_t i = 0; i < operators.size(); ++i) {
+        if (operators[i].getNickName() == newClient.getNickName()) {
+            operators.erase(operators.begin() + i);
+            break;
+        }
+    }
+}
+
+// Set operator
+void Channel::addOperator(client newClient) {
+    operators.push_back(newClient);
+}
 
 // Check if a client is an operator
- bool Channel::isOperator(client newClient) {
+bool Channel::isOperator(client newClient) {
      for (size_t i = 0; i < operators.size(); ++i) {
-         if (operators[i] == newClient) {
+         if (operators[i].getNickName() == newClient.getNickName()) {
            return true;
-         }
+        }
      }
      return false;
 }
 
+// Check if a client is a member of the channel
+bool Channel::isMember(client newClient) {
+    for (size_t i = 0; i < users.size(); ++i) {
+        if (users[i].getNickName() == newClient.getNickName()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Remove client from users vector
- void Channel::deleteClientFromChannel(client newClient) {
-     for (size_t i = 0; i < users.size(); ++i) {
-         if (users[i].getNickName() == newClient.getNickName()) {
-             users.erase(users.begin() + i);
-             break;
-         }
-     }
- }
+//  void Channel::deleteClientFromChannel(client newClient) {
+//      for (size_t i = 0; i < users.size(); ++i) {
+//          if (users[i].getNickName() == newClient.getNickName()) {
+//              users.erase(users.begin() + i);
+//              break;
+//          }
+//      }
+//  }
 
 // Check if a client (by name) is in the channel
- bool Channel::isClientcInChannel(std::string name) {
-     for (size_t i = 0; i < users.size(); ++i) {
-         if (users[i].getName() == name) {
-             return true;
-         }
-     }
-     return false;
- }
+//  bool Channel::isClientcInChannel(std::string name) {
+//      for (size_t i = 0; i < users.size(); ++i) {
+//          if (users[i].getName() == name) {
+//              return true;
+//          }
+//      }
+//      return false;
+//  }
 
 // // Broadcast a message to all clients in the channel
- void Channel::broadcast(std::string message) {
-     for (size_t i = 0; i < users.size(); ++i) {
-         users[i].receiveMessage(message);
-     }
+//  void Channel::broadcast(std::string message) {
+//      for (size_t i = 0; i < users.size(); ++i) {
+//          users[i].receiveMessage(message);
+//      }
+// }
+
+// isInviteOnly
+bool Channel::isInviteOn() {
+    return _isInviteOnly;
 }

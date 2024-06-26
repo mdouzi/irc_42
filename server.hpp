@@ -21,6 +21,7 @@ class Channel;
 
 class my_server {
 	private:
+            std::string _password;
 		std::vector<pollfd> _mypolls;
             std::map<int, bool> _disconnectedClients;
 	public:
@@ -34,6 +35,8 @@ class my_server {
       void handleClientCommands(int cfd, int index);
       void SplitInput(char buffer[255], std::vector<std::string> &tokens);
 
+      void setPassword(std::string const & password);
+      std::string const & getPassword() const;
 };
 
 

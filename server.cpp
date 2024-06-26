@@ -78,80 +78,94 @@ void my_server::send_reply(int cfd, std::string const & message) {
 
 void my_server::handleClientCommands(int cfd, int index)
 {
-  if(this->input[0] == "PASS") {
-    if (this->clients[index].getAuth() == true) {
-      send_reply(cfd, "PASS : ERR_ALREADYREGISTRED :You may not reregister");
-    } else {
-      pass((*this), index);
+  if (this->input.size() > 0){
+    if (this->input[0] == "CAP" || this->input[0] == "cap") {
+        hexchat((*this), index);
     }
-  }
-  else if(this->input[0] == "USER") {
-    if(this->clients[index].getAuth() == true) {
-        if(this->clients[index].getReg() == true) {
-          send_reply(cfd, "PASS : ERR_ALREADYREGISTRED :You may not reregister");
+    if(this->input[0] == "PASS" || this->input[0] == "pass") {
+      if (this->clients[index].getAuth() == true) {
+        send_reply(cfd, "PASS : ERR_ALREADYREGISTRED :You may not reregister");
+      } else {
+        pass((*this), index);
+      }
+    }
+    else if(this->input[0] == "USER" || this->input[0] == "user") {
+      if(this->clients[index].getAuth() == true) {
+          if(this->clients[index].getReg() == true) {
+            send_reply(cfd, "PASS : ERR_ALREADYREGISTRED :You may not reregister");
+          } else {
+            this->clients[index].setReg(true);
+            user((*this), index);
+          }
+      }
+      else {
+        send_reply(cfd, "USER : ERR_NOTREGISTERED :You have not registered");
+      }
+    }
+    else if (this->input[0] == "NICK" || this->input[0] == "nick") {
+      if(this->clients[index].getAuth() == true) {
+        if(this->clients[index].getReg2() == true) {
+          send_reply(cfd, "NICK : ERR_ALREADYREGISTRED :You may not reregister");
         } else {
-          this->clients[index].setReg(true);
-          user((*this), index);
+          nick((*this), index);
         }
-    }
-    else {
-      send_reply(cfd, "USER : ERR_NOTREGISTERED :You have not registered");
-    }
-  }
-  else if (this->input[0] == "NICK") {
-    if(this->clients[index].getAuth() == true) {
-      if(this->clients[index].getReg2() == true) {
+      } else {
         send_reply(cfd, "NICK : ERR_ALREADYREGISTRED :You may not reregister");
-      } else {
-        nick((*this), index);
-        this->clients[index].setReg2(true);
       }
-    } else {
-      send_reply(cfd, "NICK : ERR_ALREADYREGISTRED :You may not reregister");
+    }
+    else if (this->input[0] == "JOIN" || this->input[0] == "join") {
+      if(this->clients[index].getAuth() == true) {
+        if(this->clients[index].getReg2() == true) {
+          join((*this), index);
+        } else {
+          send_reply(cfd, "JOIN : ERR_NOTREGISTERED :You may not registered");
+        }
+      } else {
+        send_reply(cfd, "JOIN : ERR_NOTREGISTERED :You have not registered");
+      }
+    }
+    else if (this->input[0] == "PRIVMSG" || this->input[0] == "privmsg") {
+      if (this->clients[index].getAuth() == true) {
+        if (this->clients[index].getReg2() == true) {
+          privmsg((*this), index);
+        } else {
+          send_reply(cfd, "PRIVMSG : ERR_NOTREGISTERED :You may not registered");
+        }
+      } else {
+        send_reply(cfd, "PRIVMSG : ERR_NOTREGISTERED :You have not registered");
+      }
+    }
+    else if (this->input[0] == "MODE" || this->input[0] == "mode") {
+      if (this->clients[index].getAuth() == true) {
+        if (this->clients[index].getReg2() == true) {
+          mode((*this), index);
+        } else {
+          send_reply(cfd, "MODE : ERR_NOTREGISTERED :You may not registered");
+        }
+      } else {
+        send_reply(cfd, "MODE : ERR_NOTREGISTERED :You have not registered");
+      }
     }
   }
-  else if (this->input[0] == "JOIN") {
-    if(this->clients[index].getAuth() == true) {
-      if(this->clients[index].getReg2() == true) {
-        join((*this), index);
-      } else {
-        send_reply(cfd, "JOIN : ERR_NOTREGISTERED :You may not registered");
-      }
-    } else {
-      send_reply(cfd, "JOIN : ERR_NOTREGISTERED :You have not registered");
-    }
-  }
-  else if (this->input[0] == "PRIVMSG") {
-    if (this->clients[index].getAuth() == true) {
-      if (this->clients[index].getReg2() == true) {
-        privmsg((*this), index);
-      } else {
-        send_reply(cfd, "PRIVMSG : ERR_NOTREGISTERED :You may not registered");
-      }
-    } else {
-      send_reply(cfd, "PRIVMSG : ERR_NOTREGISTERED :You have not registered");
-    }
-  }
-  else if(this->input[0] == "KICK") {
-    if()
-  }
-  // else if (this->input[0] == "MODE") {
-  //   if (this->clients[index].getAuth() == true) {
-  //     if (this->clients[index].getReg2() == true) {
-  //       mode((*this), index);
-  //     } else {
-  //       send_reply(cfd, "MODE : ERR_NOTREGISTERED :You may not registered");
-  //     }
-  //   } else {
-  //     send_reply(cfd, "MODE : ERR_NOTREGISTERED :You have not registered");
-  //   }
-  // }
 }
 
 void my_server::SplitInput(char buffer[255], std::vector<std::string> &tokens) {
     std::stringstream ss(buffer);
     std::string token;
+    int i = 0;
     while (ss >> token) {
-        tokens.push_back(token);
+      std::cout << "token index is " << i << " and the token is >>  " << token << std::endl;
+      tokens.push_back(token);
+      i++;
     }
+}
+
+// set password
+void my_server::setPassword(std::string const & password) {
+    this->_password = password;
+}
+
+// get password
+std::string const & my_server::getPassword() const {
+    return this->_password;
 }

@@ -18,7 +18,7 @@ void user(my_server &server, int index) {
         send_reply_user(server.clients[index].getClientFd(), "ERROR: USER <username> <hostname> <servername> <realname>\n");
         server.clients[index].setReg(false);
     } else {
-        server.clients[index].setUserName(server.input[01]);
+        server.clients[index].setUserName(server.input[1]);
 		server.clients[index].setHostName(server.input[2]);
         server.clients[index].setServerName(server.input[3]);
 		std::string tempRealName = server.input[4] + " ";
