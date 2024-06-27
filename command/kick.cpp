@@ -1,31 +1,6 @@
 #include "client.hpp"
 #include "server.hpp"
 
-
-bool findChannel(my_server const &server, std::string const &namChannel) {
-  
-  for(std::vector<Channel>::iterator it = server.Channel.begin(); it != server.Channel.end(); it++)
-  {
-    if(it->getName() == nameChannel)
-        return true;
-  }
-  return false;
-} 
-
-bool findUser(Channel const &server, std::string nameUser)
-{
-  std::vector<client> users;
-
-  users = channel.getUsers();
-  for(std::vector<client>::iterator it = users.begin(); it != users.end(); it++) 
-  {
-    if(it->getName() == nameUser)
-        return true;
-  }
-  users.clear();
-  return false;
-}
-
 std::vector<std::string> parseKickCommand(const std::string& message)
 {
     std::vector<std::string> args;
@@ -63,29 +38,6 @@ std::vector<std::string> parseKickCommand(const std::string& message)
     return args;
 }
 
-int getChannel(std::vector<Channel> const & channels, std::string const &ChannelName)
-{
-  int i = 0;
-  while(channels[i])
-  {
-    if(channels[i].getName() == ChannelName)
-        return i;
-    i++;
-  }
-  return -1;
-}
-
-int getClient(std::vector<client> const &clients, std::string const &clientName)
-{
-  int i = 0;
-  while(clients[i])
-  {
-    if(clients[i].getNickName() == clientName)
-      return i;
-    i++;
-  }
-  return -1;
-}
 
 void kick(my_server const &server, int index) 
 {

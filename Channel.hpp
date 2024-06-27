@@ -56,7 +56,7 @@ class Channel {
         bool isOperator(client newClient);
         bool isInviteOn();
 
-        bool isMember(client newClient);
+        bool isMember(std::string const & ClientName);
         void addOperator(client newClient);
         void removeOperator(client newClient);
 };

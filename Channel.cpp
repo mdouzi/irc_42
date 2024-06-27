@@ -120,9 +120,9 @@ bool Channel::isOperator(client newClient) {
 }
 
 // Check if a client is a member of the channel
-bool Channel::isMember(client newClient) {
+bool Channel::isMember(std::string const & ClientName) {
     for (size_t i = 0; i < users.size(); ++i) {
-        if (users[i].getNickName() == newClient.getNickName()) {
+        if (users[i].getNickName() == ClientName) {
             return true;
         }
     }

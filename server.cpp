@@ -80,7 +80,7 @@ void my_server::handleClientCommands(int cfd, int index)
 {
   if (this->input.size() > 0){
     if (this->input[0] == "CAP" || this->input[0] == "cap") {
-        hexchat((*this), index);
+      std::cout << "HEXCHAT CONNECTED" << std::endl;
     }
     if(this->input[0] == "PASS" || this->input[0] == "pass") {
       if (this->clients[index].getAuth() == true) {
@@ -168,4 +168,32 @@ void my_server::setPassword(std::string const & password) {
 // get password
 std::string const & my_server::getPassword() const {
     return this->_password;
+}
+
+
+bool my_server::findChannel(std::string const &ChannelName) 
+{
+  for(std::vector<Channel>::iterator it = channels.begin(); it != channels.end() ; it++)
+  {
+    if(it->getName() == ChannelName)
+        return true;
+  }
+  return false;
+}
+
+
+bool my_server::isUserOnChannel(std::string const &ChannelName, std::string const &ClientName)
+{
+  Channel find;
+  for(std::vector<Channel>::iterator it = channels.begin(); it != channels.end(); it++)
+  {
+    if(it->getName() == ChannelName)
+    {
+        find = (*it);
+        break;
+    }
+  }
+  if(find.isMember(ClientName) == true)
+      return true;
+  return false;
 }
