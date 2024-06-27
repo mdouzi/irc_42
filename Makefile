@@ -1,6 +1,6 @@
 .PHONY: clean all re fclean
 CC = c++
-CFLAGS = #-Wall -Wextra -Werror -g -fsanitize=address #-std=c++98 
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address #-std=c++98 
 NAME = irc
 SRC = main.cpp server.cpp socket.cpp Channel.cpp  ./command/pass.cpp ./command/user.cpp ./command/nick.cpp client.cpp ./command/join.cpp ./command/privmsg.cpp ./command/mode.cpp
 OBJ = $(SRC:.cpp=.o)

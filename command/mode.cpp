@@ -21,7 +21,7 @@ void mode(my_server& server, int index) {
             }
         }
         if (found) {
-            if (server.channels[idx].isMember(server.clients[index]) == false) {
+            if (server.channels[idx].isMember(server.clients[idx].getNickName()) == false) {
                 server.send_reply(server.clients[index].getClientFd(), "MODE : ERR_NOTONCHANNEL :You're not on that channel");
                 return;
             }

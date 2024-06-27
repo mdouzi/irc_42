@@ -146,6 +146,11 @@ void my_server::handleClientCommands(int cfd, int index)
         send_reply(cfd, "MODE : ERR_NOTREGISTERED :You have not registered");
       }
     }
+    else if (this->input[0] == "KICK" || this->input[0] == "kick")
+    {
+      std::string user;
+      std::string Xchannel;
+    }
   }
 }
 
@@ -197,3 +202,46 @@ bool my_server::isUserOnChannel(std::string const &ChannelName, std::string cons
       return true;
   return false;
 }
+
+
+std::vector<std::string> my_server::parseKickCommand(std::string const & message)
+{
+    std::vector<std::string> args;
+    std::istringstream iss(message);
+    std::string token;
+
+    // Skip the "KICK" command itself
+    iss >> token;
+
+    // Get the channel name
+    if (iss >> token)
+    {
+      if(token[0] == '#')
+          token.substr(1);
+    }
+    args.push_back(token);
+
+    // Get the user to be kicked
+    if (iss >> token)
+        args.push_back(token);
+
+    // Get the reason (which may contain spaces)
+    std::string reason;
+    if (std::getline(iss, reason))
+    {
+        // Remove leading whitespace (including the space before the colon)
+        size_t start = reason.find_first_not_of(" \t");
+        if (start != std::string::npos)
+            reason = reason.substr(start);
+
+        // Remove the leading colon if present
+        if (!reason.empty() && reason[0] == ':')
+            reason = reason.substr(1);
+
+        if (!reason.empty())
+            args.push_back(reason);
+    }
+
+    return args;
+}
+
