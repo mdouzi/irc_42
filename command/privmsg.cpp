@@ -8,7 +8,7 @@ void privmsg(my_server& server, int index) {
         return;
     } else if (server.input.size() >= 3) {
         std::string receiver = server.input[1];
-        std::string message = server.clients[index].getNickName() + "SENDING MESSAGE TO CHANNEL ";
+        std::string message = server.clients[index].getNickName() + " SENDING MESSAGE : ";
         for (size_t i = 2; i < server.input.size(); i++) {
             message += server.input[i];
         }

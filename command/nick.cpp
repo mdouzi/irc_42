@@ -43,7 +43,6 @@ bool isValidNickName(const std::string& nick)
 void nick(my_server& server , int index) {
     if(!isUniqueNickName(server.input[1], server))
     {
-      // server.clients[index].setReg2(false);
       send_reply_nick(server.clients[index].getClientFd(), "NICK : ERR_NICKNAMEINUSE (433) : Nickname is already in use");
       return;
     }
