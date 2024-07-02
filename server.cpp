@@ -78,21 +78,25 @@ void my_server::send_reply(int cfd, std::string const & message) {
 
 void my_server::handleClientCommands(int cfd, int index)
 {
+  std::cout << "Handling Client Commands" << std::endl;
+  std::cout << "The input size is " << this->input.size() << std::endl;
+  std::cout << "The input is " << this->input[0] << std::endl;
   if (this->input.size() > 0){
     if (this->input[0] == "CAP" || this->input[0] == "cap") {
+      hexchat((*this), index);
       std::cout << "HEXCHAT CONNECTED" << std::endl;
     }
     if(this->input[0] == "PASS" || this->input[0] == "pass") {
       if (this->clients[index].getAuth() == true) {
-        send_reply(cfd, "PASS : ERR_ALREADYREGISTRED :You may not reregister");
+        send_reply(cfd, "PASS : ERR_ALREADYREGISTRED :You may not reregister 11");
       } else {
         pass((*this), index);
       }
     }
-    else if(this->input[0] == "USER" || this->input[0] == "user") {
+    if(this->input[0] == "USER" || this->input[0] == "user") {
       if(this->clients[index].getAuth() == true) {
           if(this->clients[index].getReg() == true) {
-            send_reply(cfd, "PASS : ERR_ALREADYREGISTRED :You may not reregister");
+            send_reply(cfd, "PASS : ERR_ALREADYREGISTRED :You may not reregister 11");
           } else {
             this->clients[index].setReg(true);
             user((*this), index);
@@ -102,18 +106,14 @@ void my_server::handleClientCommands(int cfd, int index)
         send_reply(cfd, "USER : ERR_NOTREGISTERED :You have not registered");
       }
     }
-    else if (this->input[0] == "NICK" || this->input[0] == "nick") {
+    if (this->input[0] == "NICK" || this->input[0] == "nick") {
       if(this->clients[index].getAuth() == true) {
-        if(this->clients[index].getReg2() == true) {
-          send_reply(cfd, "NICK : ERR_ALREADYREGISTRED :You may not reregister");
-        } else {
           nick((*this), index);
-        }
       } else {
         send_reply(cfd, "NICK : ERR_ALREADYREGISTRED :You may not reregister");
       }
     }
-    else if (this->input[0] == "JOIN" || this->input[0] == "join") {
+    if (this->input[0] == "JOIN" || this->input[0] == "join") {
       if(this->clients[index].getAuth() == true) {
         if(this->clients[index].getReg2() == true) {
           join((*this), index);
@@ -124,7 +124,7 @@ void my_server::handleClientCommands(int cfd, int index)
         send_reply(cfd, "JOIN : ERR_NOTREGISTERED :You have not registered");
       }
     }
-    else if (this->input[0] == "PRIVMSG" || this->input[0] == "privmsg") {
+    if (this->input[0] == "PRIVMSG" || this->input[0] == "privmsg") {
       if (this->clients[index].getAuth() == true) {
         if (this->clients[index].getReg2() == true) {
           privmsg((*this), index);
@@ -135,7 +135,7 @@ void my_server::handleClientCommands(int cfd, int index)
         send_reply(cfd, "PRIVMSG : ERR_NOTREGISTERED :You have not registered");
       }
     }
-    else if (this->input[0] == "MODE" || this->input[0] == "mode") {
+    if (this->input[0] == "MODE" || this->input[0] == "mode") {
       if (this->clients[index].getAuth() == true) {
         if (this->clients[index].getReg2() == true) {
           mode((*this), index);
@@ -204,44 +204,44 @@ bool my_server::isUserOnChannel(std::string const &ChannelName, std::string cons
 }
 
 
-std::vector<std::string> my_server::parseKickCommand(std::string const & message)
-{
-    std::vector<std::string> args;
-    std::istringstream iss(message);
-    std::string token;
+// std::vector<std::string> my_server::parseKickCommand(std::string const & message)
+// {
+//     std::vector<std::string> args;
+//     std::istringstream iss(message);
+//     std::string token;
 
-    // Skip the "KICK" command itself
-    iss >> token;
+//     // Skip the "KICK" command itself
+//     iss >> token;
 
-    // Get the channel name
-    if (iss >> token)
-    {
-      if(token[0] == '#')
-          token.substr(1);
-    }
-    args.push_back(token);
+//     // Get the channel name
+//     if (iss >> token)
+//     {
+//       if(token[0] == '#')
+//           token.substr(1);
+//     }
+//     args.push_back(token);
 
-    // Get the user to be kicked
-    if (iss >> token)
-        args.push_back(token);
+//     // Get the user to be kicked
+//     if (iss >> token)
+//         args.push_back(token);
 
-    // Get the reason (which may contain spaces)
-    std::string reason;
-    if (std::getline(iss, reason))
-    {
-        // Remove leading whitespace (including the space before the colon)
-        size_t start = reason.find_first_not_of(" \t");
-        if (start != std::string::npos)
-            reason = reason.substr(start);
+//     // Get the reason (which may contain spaces)
+//     std::string reason;
+//     if (std::getline(iss, reason))
+//     {
+//         // Remove leading whitespace (including the space before the colon)
+//         size_t start = reason.find_first_not_of(" \t");
+//         if (start != std::string::npos)
+//             reason = reason.substr(start);
 
-        // Remove the leading colon if present
-        if (!reason.empty() && reason[0] == ':')
-            reason = reason.substr(1);
+//         // Remove the leading colon if present
+//         if (!reason.empty() && reason[0] == ':')
+//             reason = reason.substr(1);
 
-        if (!reason.empty())
-            args.push_back(reason);
-    }
+//         if (!reason.empty())
+//             args.push_back(reason);
+//     }
 
-    return args;
-}
+//     return args;
+// }
 
