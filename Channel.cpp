@@ -84,13 +84,16 @@ void Channel::setPassword(std::string const & str) {
 }
 
 // Add client to users vector
-void Channel::addClientToChannel(client newClient) {
-    users.push_back(newClient);
+void Channel::addClientToChannel(my_server server, const client newClient, int index) {
+    server.channels[index].users.push_back(newClient);
+    std::cout << "size of users: " << server.channels[index].users.size() << std::endl;
 }
 
-void Channel::sendMessageToChannel(my_server server, std::string message) {
-    for (size_t i = 0; i < users.size(); ++i) {
-        server.send_reply(users[i].getClientFd(), message);
+void Channel::sendMessageToChannel(my_server server, std::string message, int index) {
+    std::cout << "size of users: " << server.channels[index].users.size() << std::endl;
+    for (size_t i = 0; i < server.channels[index].users.size(); ++i) {
+        std::cout << "the users are: " << server.channels[index].users[i].getNickName() << std::endl;
+        server.send_reply(server.channels[index].users[i].getClientFd(), message);
     }
 }
 
@@ -140,9 +143,9 @@ bool Channel::isMember(std::string const & ClientName) {
 //  }
 
 // Check if a client (by name) is in the channel
-//  bool Channel::isClientcInChannel(std::string name) {
+//  bool Channel::isClientInChannel(my_server server, std::string name) {
 //      for (size_t i = 0; i < users.size(); ++i) {
-//          if (users[i].getName() == name) {
+//          if ( == name) {
 //              return true;
 //          }
 //      }

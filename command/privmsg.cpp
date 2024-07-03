@@ -21,7 +21,7 @@ void privmsg(my_server& server, int index) {
                 }
             }
             if (found) {
-                server.channels[idx].sendMessageToChannel(server, message);
+                server.channels[idx].sendMessageToChannel(server, message, idx);
                 std::cout << "PRIVMSG command executed" << std::endl;
                 std::cout << "Client " << server.clients[index].getClientFd() << " sent message to channel " << server.channels[idx].getName() << std::endl;
             } else {

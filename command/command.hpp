@@ -16,4 +16,5 @@ void join(my_server& server, int index);
 void privmsg(my_server& server, int index);
 void mode(my_server& server, int index);
 void hexchat(my_server& server, int index);
+void kick(my_server& server, int index);
 #endif 

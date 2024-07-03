@@ -1,63 +1,35 @@
-#include "client.hpp"
-#include "server.hpp"
+#include "command.hpp"
 
-// std::vector<std::string> parseKickCommand(const std::string& message)
-// {
-//     std::vector<std::string> args;
-//     std::istringstream iss(message);
-//     std::string token;
-
-//     // Skip the "KICK" command itself
-//     iss >> token;
-
-//     // Get the channel name
-//     if (iss >> token)
-//         args.push_back(token);
-
-//     // Get the user to be kicked
-//     if (iss >> token)
-//         args.push_back(token);
-
-//     // Get the reason (which may contain spaces)
-//     std::string reason;
-//     if (std::getline(iss, reason))
-//     {
-//         // Remove leading whitespace (including the space before the colon)
-//         size_t start = reason.find_first_not_of(" \t");
-//         if (start != std::string::npos)
-//             reason = reason.substr(start);
-
-//         // Remove the leading colon if present
-//         if (!reason.empty() && reason[0] == ':')
-//             reason = reason.substr(1);
-
-//         if (!reason.empty())
-//             args.push_back(reason);
-//     }
-
-//     return args;
-// }
-
-
-void kick(my_server const &server, int index) 
-{
-  int i;
-  std::string channelName;
-  std::string userName;
-  std::string reason;
-  std::vector args = parseKickCommand(server.input);
-  channelName = args[0];
-  user = args[1];
-  reason = args[2];
-
-
-  if(!findChannel(server, channelName)) 
-      return;
-  if(!findUser(server, userName))
-      return;
-  else {
-    i = getChannel(server.Channels, channelName);
-    server.channels[i].deleteClientFromChannel(getClient(server.clients, userName));
-    server.channels[i],broadcast("client hase been removed");
-  }
+void kick(my_server& server, int index) {
+    if (server.clients[index].registered == false) {
+        server.send_reply(451, index, "You have not registered");
+        return;
+    }
+    if (server.channels[index].isOperator(server.clients[index]) == falsed ) {
+        server.send_reply(server.clients[index].getClientFd(), "You're not a channel operator");
+        return;
+    }
+    std::string channel = server.clients[index].channel;
+    std::string target = server.clients[index].target;
+    if (channel == "") {
+        server.send_reply(442, index, "You're not on a channel");
+        return;
+    }
+    if (target == "") {
+        server.send_reply(441, index, "No target specified");
+        return;
+    }
+    if (server.channels[channel].clients.find(target) == server.channels[channel].clients.end()) {
+        server.send_reply(441, index, "Target not on channel");
+        return;
+    }
+    if (server.clients[index].nick == target) {
+        server.send_reply(465, index, "You can't kick yourself");
+        return;
+    }
+    server.channels[channel].clients[target].send_reply(441, index, "You have been kicked by " + server.clients[index].nick);
+    server.channels[channel].clients[target].channel = "";
+    server.channels[channel].clients.erase(target);
+    server.send_reply(441, index, "Kicked " + target + " from " + channel);
+    server.send_to_channel(channel, ":" + server.clients[index].nick + "!" + server.clients[index].username + "@" + server.clients[index].hostname + " KICK " + channel + " " + target + " :Kicked by " + server.clients[index].nick);
 }

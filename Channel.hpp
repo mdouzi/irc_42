@@ -45,13 +45,13 @@ class Channel {
         void setTopicRestricted(bool isTopicRestricted);
         void setLimited(bool isLimited, int limit);
 
-        void sendMessageToChannel(my_server server, std::string message);
+        void sendMessageToChannel(my_server server, std::string message, int index);
         // void receiveMessage(std::string const & message);
 
 
-        void addClientToChannel(const client newClient);
+        void addClientToChannel(my_server server, const client newClient, int index);
       //   void deleteClientFromChannel(client newClient);
-        bool isClientcInChannel(std::string name);
+        bool isClientInChannel(Channel channel);
         void broadcast(std::string message);
         bool isOperator(client newClient);
         bool isInviteOn();
