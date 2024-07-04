@@ -84,18 +84,28 @@ void Channel::setPassword(std::string const & str) {
 }
 
 // Add client to users vector
-void Channel::addClientToChannel(my_server server, const client newClient, int index) {
-    server.channels[index].users.push_back(newClient);
-    std::cout << "size of users: " << server.channels[index].users.size() << std::endl;
+void Channel::addClientToChannel(const client newClient) {
+    this->users.push_back(newClient);
+    // channel.users.push_back(newClient);
+    // std::cout << "size of users: " << channel.users.size() << std::endl;
 }
 
-void Channel::sendMessageToChannel(my_server server, std::string message, int index) {
-    std::cout << "size of users: " << server.channels[index].users.size() << std::endl;
-    for (size_t i = 0; i < server.channels[index].users.size(); ++i) {
-        std::cout << "the users are: " << server.channels[index].users[i].getNickName() << std::endl;
-        server.send_reply(server.channels[index].users[i].getClientFd(), message);
+void Channel::sendMessageToChannel(my_server& server, std::string message) {
+    std::cout << "size of users: " << this->users.size() << std::endl;
+    for (size_t i = 0; i < this->users.size(); ++i) {
+        std::cout << "the users are: " << this->users[i].getNickName() << std::endl;
+        server.send_reply(this->users[i].getClientFd(), message);
     }
 }
+
+
+// void Channel::sendMessageToChannel(my_server server, std::string message, int index) {
+//     std::cout << "size of users: " << server.channels[index].users.size() << std::endl;
+//     for (size_t i = 0; i < server.channels[index].users.size(); ++i) {
+//         std::cout << "the users are: " << server.channels[index].users[i].getNickName() << std::endl;
+//         server.send_reply(server.channels[index].users[i].getClientFd(), message);
+//     }
+// }
 
 // remove operator
 void Channel::removeOperator(client newClient) {

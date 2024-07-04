@@ -78,9 +78,6 @@ void my_server::send_reply(int cfd, std::string const & message) {
 
 void my_server::handleClientCommands(int cfd, int index)
 {
-  std::cout << "Handling Client Commands" << std::endl;
-  std::cout << "The input size is " << this->input.size() << std::endl;
-  std::cout << "The input is " << this->input[0] << std::endl;
   if (this->input.size() > 0){
     if (this->input[0] == "CAP" || this->input[0] == "cap") {
       hexchat((*this), index);

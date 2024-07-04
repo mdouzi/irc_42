@@ -8,7 +8,7 @@ void privmsg(my_server& server, int index) {
         return;
     } else if (server.input.size() >= 3) {
         std::string receiver = server.input[1];
-        std::string message = server.clients[index].getNickName() + " SENDING MESSAGE : ";
+        std::string message = server.clients[index].getNickName() + " SENDING MESSAGE TO CHANNEL " + server.channels[idx].getName() + " ";
         for (size_t i = 2; i < server.input.size(); i++) {
             message += server.input[i];
         }
@@ -21,7 +21,10 @@ void privmsg(my_server& server, int index) {
                 }
             }
             if (found) {
-                server.channels[idx].sendMessageToChannel(server, message, idx);
+                std::cout << "idx: " << idx << std::endl;
+                std::cout << "size of channels: " << server.channels.size() << std::endl;
+                std::cout << "size of users in channel: " << server.channels[idx].getUsers().size() << std::endl;
+                server.channels[idx].sendMessageToChannel(server, message);
                 std::cout << "PRIVMSG command executed" << std::endl;
                 std::cout << "Client " << server.clients[index].getClientFd() << " sent message to channel " << server.channels[idx].getName() << std::endl;
             } else {
