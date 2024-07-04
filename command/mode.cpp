@@ -52,6 +52,7 @@ void mode(my_server& server, int index) {
                     }
                 } else if (mode == "l") {
                     if (add_remove == "+") {
+                        std::cout << "here 1\n";
                         server.channels[idx].setLimited(true, std::atoi(argOfTheMode.c_str()));
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
                         std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;

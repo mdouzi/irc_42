@@ -2,6 +2,7 @@
 
 // Default constructor
 Channel::Channel() {
+        _isInviteOnly = false;
     // Initialize members if needed
 }
 
@@ -52,6 +53,11 @@ std::vector<client> const & Channel::getInvitedClients() const {
     return invited;
 }
 
+// isInviteOnly
+bool Channel::isInviteOn() {
+    return _isInviteOnly;
+}
+
 // setter for Limited
 void Channel::setLimited(bool isLimited, int limit) {
     _isLimited = isLimited;
@@ -86,26 +92,14 @@ void Channel::setPassword(std::string const & str) {
 // Add client to users vector
 void Channel::addClientToChannel(const client newClient) {
     this->users.push_back(newClient);
-    // channel.users.push_back(newClient);
-    // std::cout << "size of users: " << channel.users.size() << std::endl;
 }
 
+// Send message to all clients in the channel
 void Channel::sendMessageToChannel(my_server& server, std::string message) {
-    std::cout << "size of users: " << this->users.size() << std::endl;
     for (size_t i = 0; i < this->users.size(); ++i) {
-        std::cout << "the users are: " << this->users[i].getNickName() << std::endl;
         server.send_reply(this->users[i].getClientFd(), message);
     }
 }
-
-
-// void Channel::sendMessageToChannel(my_server server, std::string message, int index) {
-//     std::cout << "size of users: " << server.channels[index].users.size() << std::endl;
-//     for (size_t i = 0; i < server.channels[index].users.size(); ++i) {
-//         std::cout << "the users are: " << server.channels[index].users[i].getNickName() << std::endl;
-//         server.send_reply(server.channels[index].users[i].getClientFd(), message);
-//     }
-// }
 
 // remove operator
 void Channel::removeOperator(client newClient) {
@@ -142,7 +136,7 @@ bool Channel::isMember(std::string const & ClientName) {
     return false;
 }
 
-// Remove client from users vector
+// // Remove client from users vector
 //  void Channel::deleteClientFromChannel(client newClient) {
 //      for (size_t i = 0; i < users.size(); ++i) {
 //          if (users[i].getNickName() == newClient.getNickName()) {
@@ -152,7 +146,7 @@ bool Channel::isMember(std::string const & ClientName) {
 //      }
 //  }
 
-// Check if a client (by name) is in the channel
+// // Check if a client (by name) is in the channel
 //  bool Channel::isClientInChannel(my_server server, std::string name) {
 //      for (size_t i = 0; i < users.size(); ++i) {
 //          if ( == name) {
@@ -162,14 +156,11 @@ bool Channel::isMember(std::string const & ClientName) {
 //      return false;
 //  }
 
-// // Broadcast a message to all clients in the channel
+// // Broadcast a message to all clients in the channel (not used)
 //  void Channel::broadcast(std::string message) {
 //      for (size_t i = 0; i < users.size(); ++i) {
 //          users[i].receiveMessage(message);
 //      }
 // }
 
-// isInviteOnly
-bool Channel::isInviteOn() {
-    return _isInviteOnly;
-}
+

@@ -52,16 +52,12 @@ void nick(my_server& server , int index) {
       return;
     }
     else {
-      std::cout << "msih hwa hadak " << server.input[0] << std::endl;
       server.clients[index].setNickName(server.input[1]);
       send_reply_nick(server.clients[index].getClientFd(), "----> NICK COMMAND SUCCESSFUL <----");  
       server.clients[index].setReg2(true);
-      std::cout << "setReg2 is  " << server.clients[index].getClientFd() << std::endl;
       if (2 < server.input.size()) {
         server.input.erase(server.input.begin(), server.input.begin() + 2);
       }
-      std::cout << "this is the nick name " << server.clients[index].getNickName() << std::endl;
-      std::cout << "hereeee  NICK" << server.input[0] << std::endl;
       if (server.input[0] == "USER" || server.input[0] == "user") 
         server.handleClientCommands(server.clients[index].getClientFd(), index);
     }

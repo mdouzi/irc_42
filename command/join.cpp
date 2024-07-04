@@ -19,11 +19,10 @@ void join(my_server& server, int index) {
                 }
             }
             if (found && server.channels[idx].isInviteOn() == true) {
-                server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_INVITEONLYCHAN :Cannot join channel (+i)");
+                server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_INVITEONLYCHAN :Cannot join channel bc it is invite only");
                 return;
             } else if (found) {
                 server.channels[idx].addClientToChannel(server.clients[index]);
-                std::cout << server.channels[idx].getName() << std::endl;
                 server.send_reply(server.clients[index].getClientFd(), "JOIN :You have joined the channel");
                 std::cout << "Channel name: " << server.channels[idx].getName() << std::endl;
                 std::cout << "Client " << server.clients[index].getNickName() << " joined channel " << server.channels[idx].getName() << std::endl;

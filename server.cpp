@@ -56,7 +56,6 @@ void my_server::runServer(wint_t port) {
                 if (ret > 0) {
                     buff[ret] = '\0';
                     SplitInput(buff, this->input);
-                    std::cout << "Polling " << this->_mypolls[i].fd << std::endl;
                     handleClientCommands(this->_mypolls[i].fd, (i - 1));
                     this->input.clear();
                     std::cout << buff;
@@ -156,7 +155,6 @@ void my_server::SplitInput(char buffer[255], std::vector<std::string> &tokens) {
     std::string token;
     int i = 0;
     while (ss >> token) {
-      std::cout << "token index is " << i << " and the token is >>  " << token << std::endl;
       tokens.push_back(token);
       i++;
     }
