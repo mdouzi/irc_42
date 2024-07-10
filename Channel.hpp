@@ -31,13 +31,14 @@ class Channel {
         std::string const & getName() const;
         std::string const & getTopic() const;
         std::string const & getPassword() const;
-       std::string const & getMode() const;
+        std::string const & getMode() const;
+        size_t getLimit() const;
         
-        std::vector<client> const &getUsers() const;
+        std::vector<client> &getUsers() ;
         // std::vector<client> const &getOperators() const;
         std::vector<client> const &getInvitedClients() const;
 
-
+        void setMode(std::string const & str);
         void setName(std::string const & str);
         void setTopic(std::string const & str);
         void setPassword(std::string const & str);
@@ -45,7 +46,7 @@ class Channel {
         void setTopicRestricted(bool isTopicRestricted);
         void setLimited(bool isLimited, int limit);
 
-        void sendMessageToChannel(my_server& server, std::string message);
+        void sendMessageToChannel(my_server& server, std::string message , int index);
         // void receiveMessage(std::string const & message);
 
 

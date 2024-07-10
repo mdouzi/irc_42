@@ -7,8 +7,9 @@ void privmsg(my_server& server, int index) {
         server.send_reply(server.clients[index].getClientFd(), "PRIVMSG : ERR_NEEDMOREPARAMS :Not enough parameters");
         return;
     } else if (server.input.size() >= 3) {
+        std::string sender = server.clients[index].getNickName();
         std::string receiver = server.input[1];
-        std::string message = server.clients[index].getNickName() + " SENDING MESSAGE TO CHANNEL " + server.channels[idx].getName() + " ";
+        std::string message ;
         for (size_t i = 2; i < server.input.size(); i++) {
             message += server.input[i];
         }
@@ -16,12 +17,12 @@ void privmsg(my_server& server, int index) {
             for (size_t i = 0; i < server.channels.size(); ++i) {
                 if (server.channels[i].getName() == receiver) {
                     found = true;
-                    index = i;
+                    idx = i;
                     break;
                 }
             }
             if (found) {
-                server.channels[idx].sendMessageToChannel(server, message);
+                server.channels[idx].sendMessageToChannel(server, message, index);
                 std::cout << "PRIVMSG command executed" << std::endl;
                 std::cout << "Client " << server.clients[index].getClientFd() << " sent message to channel " << server.channels[idx].getName() << std::endl;
             } else {
@@ -31,12 +32,13 @@ void privmsg(my_server& server, int index) {
             for (size_t i = 0; i < server.clients.size(); ++i) {
                 if (server.clients[i].getNickName() == receiver) {
                     found = true;
-                    index = i;
+                    // index = i;
                     break;
                 }
             }
             if (found) {
-                server.clients[index].sendMessageToClient(server.clients[index], message);
+                std::string hexinfo = ":" + sender + " PRIVMSG " + receiver + " :" + message;
+                server.send_reply(server.clients[index].getClientFd(), hexinfo);
                 std::cout << "PRIVMSG command executed" << std::endl;
                 std::cout << "Client " << server.clients[index].getNickName() << " sent message to client " << server.clients[index].getNickName() << std::endl;
             } else {

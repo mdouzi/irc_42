@@ -85,8 +85,11 @@ int client::getClientFd() {
     return client_fd;
 }
 
-void client::sendMessageToClient(client client, std::string const & msg) {
-    my_server server;
-    std::string message = client.getNickName() + " " + msg;
-    server.send_reply(client.getClientFd(), message);
-}
+// void client::sendMessageToClient(std::string sender, std::string recv, std::string const & msg) {
+    
+//     my_server server;
+//     //std::string message = client.getNickName() + " " + msg;
+//     std::string message = ":" + sender + " PRIVMSG " + recv + " :" + msg;
+//     server.send_reply(server.client.getClientFd(), message);
+// }
+// //  :Angel PRIVMSG Wiz :Hello are you receiving this message ?

@@ -3,6 +3,10 @@
 // Default constructor
 Channel::Channel() {
         _isInviteOnly = false;
+        _isLimited = false;
+        _isTopicRestricted = false;
+        _limit = 0;
+        std::cout << "hahwaaaaaaa" << std::endl;
     // Initialize members if needed
 }
 
@@ -44,7 +48,7 @@ std::string const & Channel::getPassword() const {
 }
 
 // Getter for users vector
-std::vector<client> const & Channel::getUsers() const {
+std::vector<client> & Channel::getUsers() {
     return users;
 }
 
@@ -69,8 +73,19 @@ void Channel::setTopicRestricted(bool isTopicRestricted) {
     _isTopicRestricted = isTopicRestricted;
 }
 
+// getter for Limited
+size_t Channel::getLimit() const {
+    return _limit;
+}
+
+// setter for Mode
+void Channel::setMode(std::string const & str) {
+    mode = str;
+}
+
 // setter for InviteOnly
 void Channel::setInviteOnly(bool isInviteOnly) {
+    std::cout << "hahwa HSAAAAAAAAALLLLLLLL " << std::endl;
     _isInviteOnly = isInviteOnly;
 }
 
@@ -95,11 +110,18 @@ void Channel::addClientToChannel(const client newClient) {
 }
 
 // Send message to all clients in the channel
-void Channel::sendMessageToChannel(my_server& server, std::string message) {
+void Channel::sendMessageToChannel(my_server& server, std::string message, int index) {
+    std::string messageToSend = ":" + server.clients[index].getNickName() + "!" + server.clients[index].getUserName() + " PRIVMSG " + this->name + " :" + message;
+
     for (size_t i = 0; i < this->users.size(); ++i) {
-        server.send_reply(this->users[i].getClientFd(), message);
+        if (this->users[i].getNickName() != server.clients[index].getNickName()) {
+            server.send_reply(this->users[i].getClientFd(), messageToSend);
+        }
+        // server.send_reply(this->users[i].getClientFd(), message);
     }
 }
+
+// :dan!~h@localhost PRIVMSG #coolpeople :Hi everyone!
 
 // remove operator
 void Channel::removeOperator(client newClient) {
