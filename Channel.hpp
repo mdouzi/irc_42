@@ -58,7 +58,7 @@ class Channel {
       //   void deleteClientFromChannel(client newClient);
         bool isClientInChannel(Channel channel);
         void broadcast(std::string message);
-        bool isOperator(client newClient);
+        bool isOperator(std::string const & userName);
         bool isInviteOn();
 
         bool isMember(std::string const & ClientName);
