@@ -39,7 +39,6 @@ class my_server {
 
 
       bool findChannel(std::string const &ChannelName);
-      // std::vector<std::string> parseKickCommand(void);
       bool isUserOnChannel(std::string const &ChannelName, std::string const &ClientName);
       
       std::string const & getPassword() const;

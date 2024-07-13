@@ -162,9 +162,9 @@ void Channel::addOperator(std::string newClient) {
 }
 
 // Check if a client is an operator
-bool Channel::isOperator(std::string const & userName) {
+bool Channel::isOperator(client newClient) {
      for (size_t i = 0; i < operators.size(); ++i) {
-         if (operators[i].getNickName() == userName) {
+         if (operators[i].getNickName() == newClient.getNickName()) {
            return true;
         }
      }

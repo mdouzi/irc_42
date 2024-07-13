@@ -35,9 +35,6 @@ class client {
         std::string const &getServerName();
         std::string const &getUserName();
 
-
-        void sendMessageToClient(std::string sender, std::string recv, std::string const & msg);
-
         bool getAuth();
         bool getReg();
         bool getReg2();

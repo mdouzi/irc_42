@@ -37,8 +37,17 @@ void privmsg(my_server& server, int index) {
                 }
             }
             if (found) {
-                std::string hexinfo = ":" + sender + " PRIVMSG " + receiver + " :" + message;
-                server.send_reply(server.clients[index].getClientFd(), hexinfo);
+                    for (size_t i = 0; i < server.clients.size(); ++i) {
+                        if (server.clients[i].getNickName() == receiver) {
+                        server.send_reply(server.clients[i].getClientFd(), "PRIVMSG " + receiver + " :" + message);
+                        }
+                    }
+                    for (size_t i = 0; i < server.clients.size(); ++i) {
+                        if (server.clients[i].getNickName() == receiver) {
+                            server.send_reply(server.clients[i].getClientFd(), ":" + receiver + "!" + receiver + "@0.0.0.0" + " PRIVMSG " + receiver + " :" + message);
+                        }
+                    }
+                // server.send_reply(server.clients[index].getClientFd(), "PRIVMSG " + receiver + " :" + message);
                 std::cout << "PRIVMSG command executed" << std::endl;
                 std::cout << "Client " << server.clients[index].getNickName() << " sent message to client " << server.clients[index].getNickName() << std::endl;
             } else {
@@ -47,3 +56,5 @@ void privmsg(my_server& server, int index) {
         }
     }
 }
+// res >> :nn!nn@0.0.0.0 PRIVMSG dd :Hi
+// rec << PRIVMSG nn :Hello

@@ -13,6 +13,11 @@ client::client()
 
 client::~client() {}
 
+// setter for first
+// void client::setFirst(bool first) {
+//     _first = first;
+// }
+
 void client::setClientFd(int fd) {
     client_fd = fd;
 }
@@ -48,6 +53,11 @@ void client::setReg2(bool of) {
 void client::setReg(bool of) {
     Alreadyregistred = of;
 }
+
+
+// bool client::getFirst() {
+//     return _first;
+// }
 
 std::string const &client::getNickName() {
     return nickname;
@@ -85,7 +95,7 @@ int client::getClientFd() {
     return client_fd;
 }
 
-// void client::sendMessageToClient(std::string sender, std::string recv, std::string const & msg) {
+// void client::essageToClient(std::string sender, std::string recv, std::string const & msg) {
     
 //     my_server server;
 //     //std::string message = client.getNickName() + " " + msg;

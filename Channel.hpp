@@ -32,6 +32,7 @@ class Channel {
         std::string const & getTopic() const;
         std::string const & getPassword() const;
         std::string const & getMode() const;
+
         size_t getLimit() const;
         
         std::vector<client> &getUsers() ;
@@ -58,7 +59,7 @@ class Channel {
       //   void deleteClientFromChannel(client newClient);
         bool isClientInChannel(Channel channel);
         void broadcast(std::string message);
-        bool isOperator(std::string const & userName);
+        bool isOperator(client newClient);
         bool isInviteOn();
 
         bool isMember(std::string const & ClientName);
