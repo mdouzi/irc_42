@@ -21,11 +21,12 @@ void join(my_server& server, int index) {
         }
 
         if (found) {
-            // Handle existing channel
-            if (server.channels[idx].isInviteOn()) {
+            if (server.channels[idx].isInviteOn() && !server.channels[idx].isInvited(server.clients[index])) {
                 server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_INVITEONLYCHAN :Cannot join channel because it is invite only");
                 return;
             }
+            std::cout << "channel limit: " << server.channels[idx].getLimit() << std::endl;
+            std::cout << "channel users: " << server.channels[idx].getUsers().size() << std::endl;
             if (server.channels[idx].getLimit() != 0 && server.channels[idx].getLimit() <= server.channels[idx].getUsers().size()) {
                 server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_CHANNELISFULL :Cannot join channel because it is full");
                 return;
@@ -57,11 +58,13 @@ void join(my_server& server, int index) {
 
         } else {
             // Handle new channel creation
-            server.channels.push_back(Channel(channelName, ""));
+            server.channels.push_back(Channel(channelName, "")); // addOperator
             idx = server.channels.size() - 1;
             server.channels[idx].addClientToChannel(server.clients[index]);
             server.channels[idx].setName(channelName);
-            server.channels[idx].addOperator(server.clients[index]);  // Make the first client an operator
+            server.channels[idx].addOperator(server.clients[index].getNickName());
+            std::cout << "Client " << server.clients[index].getNickName() << " created channel " << server.channels[idx].getName() << std::endl;
+            std::cout << "operator: " << server.channels[idx].getOperators()[0].getNickName() << std::endl;
 
             // Notify the client about joining the new channel
             std::string channelinfo = ":" + server.clients[index].getNickName() + "!" + server.clients[index].getUserName() + " JOIN " + channelName;
@@ -70,10 +73,12 @@ void join(my_server& server, int index) {
             // Send names list to the client
             std::string namesList = ":zaba.org 353 " + server.clients[index].getNickName() + " = " + channelName + " :@" + server.clients[index].getNickName();
             server.send_reply(server.clients[index].getClientFd(), namesList);
+            std::cout << "JOIN : namesList: " << namesList << std::endl;
 
             // Send end of names list to the client
             std::string endNames = ":zaba.org 366 " + server.clients[index].getNickName() + " " + channelName + " :End of /NAMES list.";
             server.send_reply(server.clients[index].getClientFd(), endNames);
+            std::cout << "JOIN : endNames: " << endNames << std::endl;
         }
     } else {
         server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_NOSUCHCHANNEL :No such channel");

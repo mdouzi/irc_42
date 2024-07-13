@@ -35,8 +35,10 @@ class Channel {
         size_t getLimit() const;
         
         std::vector<client> &getUsers() ;
-        // std::vector<client> const &getOperators() const;
-        std::vector<client> const &getInvitedClients() const;
+        std::vector<client> &getOperators() ;
+        // std::vector<client> const &getInvitedClients() const;
+        bool getTopicRestricted();
+
 
         void setMode(std::string const & str);
         void setName(std::string const & str);
@@ -45,11 +47,13 @@ class Channel {
         void setInviteOnly(bool isInviteOnly);
         void setTopicRestricted(bool isTopicRestricted);
         void setLimited(bool isLimited, int limit);
+        void setInvitedClients(client newClient);
 
         void sendMessageToChannel(my_server& server, std::string message , int index);
         // void receiveMessage(std::string const & message);
 
-
+        // check if the client if invited to the channel
+        bool isInvited(client newClient);
         void addClientToChannel(const client newClient);
       //   void deleteClientFromChannel(client newClient);
         bool isClientInChannel(Channel channel);
@@ -58,8 +62,8 @@ class Channel {
         bool isInviteOn();
 
         bool isMember(std::string const & ClientName);
-        void addOperator(client newClient);
-        void removeOperator(client newClient);
+        void addOperator(std::string newClient);
+        void removeOperator(std::string newClient);
 };
 
 

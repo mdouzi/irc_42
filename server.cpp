@@ -142,6 +142,28 @@ void my_server::handleClientCommands(int cfd, int index)
         send_reply(cfd, "MODE : ERR_NOTREGISTERED :You have not registered");
       }
     }
+    if (this->input[0] == "TOPIC" || this->input[0] ==  "topic") {
+      if (this->clients[index].getAuth() == true) {
+        if (this->clients[index].getReg2() == true) {
+          topic((*this), index);
+        } else {
+          send_reply(cfd, "TOPIC : ERR_NOTREGISTERED :You may not registered");
+        }
+      } else {
+        send_reply(cfd, "TOPIC : ERR_NOTREGISTERED :You have not registered");
+      }
+    }
+    if (this->input[0] == "INVITE" || this->input[0] == "invite") {
+      if (this->clients[index].getAuth() == true) {
+        if (this->clients[index].getReg2() == true) {
+          invite((*this), index);
+        } else {
+          send_reply(cfd, "INVITE : ERR_NOTREGISTERED :You may not registered");
+        }
+      } else {
+        send_reply(cfd, "INVITE : ERR_NOTREGISTERED :You have not registered");
+      }
+    }
     else if (this->input[0] == "KICK" || this->input[0] == "kick")
     {
       std::string user;

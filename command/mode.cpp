@@ -33,56 +33,92 @@ void mode(my_server& server, int index) {
                 return;
             }
             else {
-                 if (server.channels[idx].getMode() == "t") {
+                 if (mode == "t") {
                     if (add_remove == "+") {
                         server.channels[idx].setTopicRestricted(true);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     } else if (add_remove == "-") {
                         server.channels[idx].setTopicRestricted(false);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     }
-                } else if (server.channels[idx].getMode() == "i") {
+                } else if (mode == "i") {
                     if (add_remove == "+") {
                         server.channels[idx].setInviteOnly(true);
-                        server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+                        server.send_reply(server.clients[index].getClientFd(), ":zaba.org 324 " + server.clients[index].getNickName() + " " + server.channels[idx].getName() + " +" + mode);
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     } else if (add_remove == "-") {
                         server.channels[idx].setInviteOnly(false);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     }
-                } else if (server.channels[idx].getMode() == "l") {
+                } else if (mode == "l") {
                     if (add_remove == "+") {
                         std::cout << "here 1\n";
                         server.channels[idx].setLimited(true, std::atoi(argOfTheMode.c_str()));
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     } else if (add_remove == "-") {
                         server.channels[idx].setLimited(false, 0);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     }
-                } else if (server.channels[idx].getMode() == "o") {
+                } else if (mode == "o") {
                     if (add_remove == "+") {
-                        server.channels[idx].addOperator(server.clients[index]);
+                        server.channels[idx].addOperator(argOfTheMode);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+                        std::string namesList = ":zaba.org 353 " + server.clients[index].getNickName() + " = " + channelName + " :";
+                        for (size_t i = 0; i < server.channels[idx].getOperators().size(); ++i) {
+                            if (i > 0) {
+                                namesList += " ";
+                            }
+                            namesList += "@" + server.channels[idx].getOperators()[i].getNickName();
+                        }
+
+                        std::string endNames = ":zaba.org 366 " + server.clients[index].getNickName() + " " + channelName + " :End of /NAMES list.";
+
+                        for (size_t i = 0; i < server.channels[idx].getUsers().size(); ++i) {
+                            server.send_reply(server.channels[idx].getUsers()[i].getClientFd(), namesList);
+                            server.send_reply(server.channels[idx].getUsers()[i].getClientFd(), endNames);
+                        }
+
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     } else if (add_remove == "-") {
-                        server.channels[idx].removeOperator(server.clients[index]);
+                        server.channels[idx].removeOperator(argOfTheMode);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+
+                        std::string namesList = ":zaba.org 353 " + server.clients[index].getNickName() + " = " + channelName + " :";
+
+                        for (size_t i = 0; i < server.channels[idx].getUsers().size(); ++i) {
+                            if (i > 0) {
+                                namesList += " ";
+                            }
+                            if (server.channels[idx].isOperator(server.channels[idx].getUsers()[i])) {
+                                namesList += "@" + server.channels[idx].getUsers()[i].getNickName();
+                            }
+                            else
+                                namesList += server.channels[idx].getUsers()[i].getNickName();
+                        }
+
+                        std::string endNames = ":zaba.org 366 " + server.clients[index].getNickName() + " " + channelName + " :End of /NAMES list.";
+                        
+                        for (size_t i = 0; i < server.channels[idx].getUsers().size(); ++i) {
+                            server.send_reply(server.channels[idx].getUsers()[i].getClientFd(), namesList);
+                            server.send_reply(server.channels[idx].getUsers()[i].getClientFd(), endNames);
+                        }
+
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     }
-                } else if (server.channels[idx].getMode() == "k")  {
+                } else if (mode == "k")  {
                     if (add_remove == "+") {
                         server.channels[idx].setPassword(argOfTheMode);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     } else if (add_remove == "-") {
                         server.channels[idx].setPassword("");
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << server.channels[idx].getMode() << std::endl;
+                        std::cout << "Client " << server.clients[index].getNickName() << " set the mode of channel " << server.channels[idx].getName() << " to " << mode << std::endl;
                     }
                 } else {
                     server.send_reply(server.clients[index].getClientFd(), "MODE : ERR_UNKNOWNMODE :Unknown mode");

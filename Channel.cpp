@@ -2,11 +2,6 @@
 
 // Default constructor
 Channel::Channel() {
-        _isInviteOnly = false;
-        _isLimited = false;
-        _isTopicRestricted = false;
-        _limit = 0;
-        std::cout << "hahwaaaaaaa" << std::endl;
     // Initialize members if needed
 }
 
@@ -19,12 +14,22 @@ Channel::Channel(std::string name, std::string topic, client op, std::string pas
 // Constructor without password and operator
 Channel::Channel(std::string name, std::string topic)
     : name(name), topic(topic) {
+        _isInviteOnly = false;
+        _isLimited = false;
+        _isTopicRestricted = false;
+        _limit = 0;
+        std::cout << " >>>>>>>   Channel created <<<<<<<<  " << std::endl;
     // Initialize members
 }
 
 // Destructor
 Channel::~Channel() {
     // Clean up if needed
+}
+
+// Getter for topic
+bool Channel::getTopicRestricted() {
+    return _isTopicRestricted;
 }
 
 // Getter for mode
@@ -52,9 +57,14 @@ std::vector<client> & Channel::getUsers() {
     return users;
 }
 
-// Getter for invited clients vector
-std::vector<client> const & Channel::getInvitedClients() const {
-    return invited;
+// check if the client is invited to the channel
+bool Channel::isInvited(client newClient) {
+    for (size_t i = 0; i < invited.size(); ++i) {
+        if (invited[i].getNickName() == newClient.getNickName()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // isInviteOnly
@@ -62,8 +72,15 @@ bool Channel::isInviteOn() {
     return _isInviteOnly;
 }
 
+// setter for invited clients
+void Channel::setInvitedClients(client newClient) {
+    invited.push_back(newClient);
+}
+
 // setter for Limited
 void Channel::setLimited(bool isLimited, int limit) {
+    std::cout << isLimited << " Limited" << limit << std::endl;
+    std::cout << limit << "   limit" << std::endl;
     _isLimited = isLimited;
     _limit = limit;
 }
@@ -124,9 +141,9 @@ void Channel::sendMessageToChannel(my_server& server, std::string message, int i
 // :dan!~h@localhost PRIVMSG #coolpeople :Hi everyone!
 
 // remove operator
-void Channel::removeOperator(client newClient) {
+void Channel::removeOperator(std::string newClient) {
     for (size_t i = 0; i < operators.size(); ++i) {
-        if (operators[i].getNickName() == newClient.getNickName()) {
+        if (operators[i].getNickName() == newClient) {
             operators.erase(operators.begin() + i);
             break;
         }
@@ -134,8 +151,14 @@ void Channel::removeOperator(client newClient) {
 }
 
 // Set operator
-void Channel::addOperator(client newClient) {
-    operators.push_back(newClient);
+void Channel::addOperator(std::string newClient) {
+    for (size_t i = 0; i < users.size(); ++i) {
+        if (users[i].getNickName() == newClient) {
+            operators.push_back(users[i]);
+            break;
+        }
+    }
+    // operators.push_back(newClient);
 }
 
 // Check if a client is an operator
@@ -146,6 +169,11 @@ bool Channel::isOperator(client newClient) {
         }
      }
      return false;
+}
+
+// getter fors
+std::vector<client> & Channel::getOperators() {
+    return operators;
 }
 
 // Check if a client is a member of the channel
