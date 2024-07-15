@@ -1,35 +1,79 @@
 #include "command.hpp"
 
-// void kick(my_server& server, int index) {
-//     if (server.clients[index].registered == false) {
-//         server.send_reply(451, index, "You have not registered");
-//         return;
-//     }
-//     if (server.channels[index].isOperator(server.clients[index]) == falsed ) {
-//         server.send_reply(server.clients[index].getClientFd(), "You're not a channel operator");
-//         return;
-//     }
-//     std::string channel = server.clients[index].channel;
-//     std::string target = server.clients[index].target;
-//     if (channel == "") {
-//         server.send_reply(442, index, "You're not on a channel");
-//         return;
-//     }
-//     if (target == "") {
-//         server.send_reply(441, index, "No target specified");
-//         return;
-//     }
-//     if (server.channels[channel].clients.find(target) == server.channels[channel].clients.end()) {
-//         server.send_reply(441, index, "Target not on channel");
-//         return;
-//     }
-//     if (server.clients[index].nick == target) {
-//         server.send_reply(465, index, "You can't kick yourself");
-//         return;
-//     }
-//     server.channels[channel].clients[target].send_reply(441, index, "You have been kicked by " + server.clients[index].nick);
-//     server.channels[channel].clients[target].channel = "";
-//     server.channels[channel].clients.erase(target);
-//     server.send_reply(441, index, "Kicked " + target + " from " + channel);
-//     server.send_to_channel(channel, ":" + server.clients[index].nick + "!" + server.clients[index].username + "@" + server.clients[index].hostname + " KICK " + channel + " " + target + " :Kicked by " + server.clients[index].nick);
-// }
+void send_reply(int cfd, std::string const & message) {
+    std::string reply = message + "\r\n";
+    ssize_t bytes_sent = send(cfd, reply.c_str(), reply.length(), 0);
+    if (bytes_sent == -1) {
+        std::cerr << "Error sending reply: " << strerror(errno) << std::endl;
+    }
+}
+
+void kick(my_server & server, int index) {
+    std::string channelName;
+    std::string userName;
+    std::string reason;
+    int channelIndex;
+
+    // Check and extract channel name
+    if (server.input.size() > 1 && server.input[1][0] == '#' && server.input[1].size() > 1) {
+        channelName = server.input[1];
+        channelName.erase(0, channelName.find_first_not_of(" \t\n\r\f\v")); // trim leading spaces
+        channelName.erase(channelName.find_last_not_of(" \t\n\r\f\v") + 1); // trim trailing spaces
+    } else {
+        send_reply(server.clients[index].getClientFd(), "KICK : ERR_NOSUCHCHANNEL :No such channel");
+        return;
+    }
+
+    // Check and extract user name
+    if (server.input.size() > 2 && server.input[2].size() > 1) {
+        userName = server.input[2];
+        userName.erase(0, userName.find_first_not_of(" \t\n\r\f\v")); // trim leading spaces
+        userName.erase(userName.find_last_not_of(" \t\n\r\f\v") + 1); // trim trailing spaces
+    } else {
+        send_reply(server.clients[index].getClientFd(), "KICK : ERR_NOSUCHNICK :No such nick/channel");
+        return;
+    }
+
+    // Check and extract reason (optional)
+    if (server.input.size() > 3 && server.input[3][0] == ':') {
+        reason = server.input[3].substr(1);
+        for (size_t i = 4; i < server.input.size(); ++i) {
+            reason += " " + server.input[i];
+        }
+    } else {
+        reason = "";
+    }
+
+    // Find the channel
+    if (!server.findChannel(channelName)) {
+        send_reply(server.clients[index].getClientFd(), "KICK : ERR_NOSUCHCHANNEL :No such channel");
+        return;
+    } else {
+        channelIndex = server.getChannel(channelName);
+        if (channelIndex == -1) {
+            send_reply(server.clients[index].getClientFd(), "KICK : ERR_NOSUCHCHANNEL :No such channel");
+            return;
+        }
+
+        // Check if the client is a channel operator
+        if (!server.channels[channelIndex].isOperator(server.clients[index])) {
+            send_reply(server.clients[index].getClientFd(), "KICK : ERR_CHANOPRIVSNEEDED :You're not channel operator");
+            return;
+        } else {
+            // Check if the user to be kicked is a member of the channel
+            if (server.channels[channelIndex].isMember(userName)) {
+                server.channels[channelIndex].deleteUser(userName);
+                // Notify all members in the channel about the kick
+                std::string kickMessage = ":" + server.clients[index].getNickName() + " KICK " + channelName + " " + userName;
+                if (!reason.empty()) {
+                    kickMessage += " :" + reason;
+                }
+                server.channels[channelIndex].broadcast(kickMessage);
+                send_reply(server.clients[index].getClientFd(), "USER BEEN KICKED");
+            } else {
+                send_reply(server.clients[index].getClientFd(), "KICK : ERR_USERNOTINCHANNEL :They aren't on that channel");
+                return;
+            }
+        }
+    }
+}

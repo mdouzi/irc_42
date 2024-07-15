@@ -150,6 +150,23 @@ void Channel::removeOperator(std::string newClient) {
     }
 }
 
+void Channel::deleteUser(std::string const & userName)
+{
+  for(std::vector<client>::iterator it = this->users.begin(); it != this->users.end(); it++) {
+    if(it->getNickName() == userName) {
+      this->users.erase(it);
+      return;
+    }
+  }
+
+  for(std::vector<client>::iterator it1 = this->operators.begin(); it1 != this->operators.end(); it1++) {
+    if(it1->getNickName() == userName) {
+      this->operators.erase(it1);
+      return;
+    }
+  }
+}
+
 // Set operator
 void Channel::addOperator(std::string newClient) {
     for (size_t i = 0; i < users.size(); ++i) {

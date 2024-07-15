@@ -66,6 +66,15 @@ void my_server::runServer(wint_t port) {
     }
 }
 
+int my_server::getChannel(std::string const & channelName) {
+  for (size_t i = 0; i < channels.size(); ++i) {
+        if (channels[i].getName() == channelName) {
+            return i;
+        }
+    }
+  return -1;
+}
+
 
 void my_server::send_reply(int cfd, std::string const & message) {
    std::string reply = message + "\r\n";

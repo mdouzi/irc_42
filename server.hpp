@@ -38,6 +38,8 @@ class my_server {
 
       void setPassword(std::string const & password);
 
+      int getChannel(std::string const & channelName);
+
 
       bool findChannel(std::string const &ChannelName);
       bool isUserOnChannel(std::string const &ChannelName, std::string const &ClientName);

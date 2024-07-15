@@ -51,6 +51,7 @@ class Channel {
         void setInvitedClients(client newClient);
 
         void sendMessageToChannel(my_server& server, std::string message , int index);
+        void deleteUser(std::string const & userName);
         // void receiveMessage(std::string const & message);
 
         // check if the client if invited to the channel
