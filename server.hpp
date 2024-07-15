@@ -25,6 +25,7 @@ class my_server {
 		std::vector<pollfd> _mypolls;
             std::map<int, bool> _disconnectedClients;
 	public:
+      std::map<std::string, std::vector<std::string> > conversations;
       std::vector<client> clients;
       std::vector<Channel> channels;
       std::vector<std::string> input;

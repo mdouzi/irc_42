@@ -53,6 +53,7 @@ void nick(my_server& server , int index) {
     }
     else {
       server.clients[index].setNickName(server.input[1]);
+      server.conversations[server.clients[index].getNickName()];
       send_reply_nick(server.clients[index].getClientFd(), "----> NICK COMMAND SUCCESSFUL <----");  
       server.clients[index].setReg2(true);
       if (2 < server.input.size()) {
