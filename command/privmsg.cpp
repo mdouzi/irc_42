@@ -1,7 +1,4 @@
 #include "command.hpp"
-
-
-
 void privmsg(my_server& server, int index) {
     bool found = false;
     int channelIndex = 0;
@@ -65,11 +62,11 @@ void privmsg(my_server& server, int index) {
                     // New conversation
                     server.conversations[sender].push_back(receiver);
                     server.conversations[receiver].push_back(sender); // Assuming bi-directional conversation
-                    server.send_reply(server.clients[recIndex].getClientFd(), "PRIVMSG " + receiver + " :" + message);
-                    server.send_reply(server.clients[index].getClientFd(), ":" + receiver + "!" + receiver + "@0.0.0.0" + " PRIVMSG " + sender + " :" + message);
+                    server.send_reply(server.clients[recIndex].getClientFd(), ":" + sender + "!" + sender + "@0.0.0.0" + " PRIVMSG " + receiver + " :" + message);
+                    server.send_reply(server.clients[index].getClientFd(), "PRIVMSG " + receiver + " :" + message);
                 } else {
                     // Existing conversation
-                    server.send_reply(server.clients[recIndex].getClientFd(), "PRIVMSG " + receiver + " :" + message);
+                    server.send_reply(server.clients[recIndex].getClientFd(), ":" + sender + "!" + sender + "@0.0.0.0" + " PRIVMSG " + receiver + " :" + message);
                 }
             } else {
                 server.send_reply(server.clients[index].getClientFd(), "PRIVMSG : ERR_NOSUCHNICK :No such nickname");
@@ -77,6 +74,7 @@ void privmsg(my_server& server, int index) {
         }
     }
 }
+
 
 
 // void privmsg(my_server& server, int index) {
