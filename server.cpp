@@ -175,8 +175,21 @@ void my_server::handleClientCommands(int cfd, int index)
     }
     else if (this->input[0] == "KICK" || this->input[0] == "kick")
     {
-      std::string user;
-      std::string Xchannel;
+      std::cout << "###########"<< std::endl;
+      for(size_t i = 0; i < this->input.size(); i++) {
+        std::cout << "this is input =>" << this->input[i] << " " << std::endl;
+      }
+      std::cout << "###########" << std::endl;
+
+     if(this->clients[index].getAuth() == true) {
+        if(this->clients[index].getReg2() == true) {
+          kick((*this), index);
+        } else {
+          send_reply(cfd, "KICK : ERR_NOTREGISTERED :You may not registered");
+        }
+     } else {
+        send_reply(cfd, "KICK : ERR_NOTREGISTERED :You have not registered");
+     }
     }
   }
 }

@@ -1,5 +1,6 @@
 #include "Channel.hpp"
-
+#include <sys/types.h>
+#include <sys/socket.h>
 // Default constructor
 Channel::Channel() {
     // Initialize members if needed
@@ -154,13 +155,14 @@ void Channel::deleteUser(std::string const & userName)
 {
   for(std::vector<client>::iterator it = this->users.begin(); it != this->users.end(); it++) {
     if(it->getNickName() == userName) {
-      this->users.erase(it);
+      this->users.erase(it);;
       return;
     }
   }
 
   for(std::vector<client>::iterator it1 = this->operators.begin(); it1 != this->operators.end(); it1++) {
     if(it1->getNickName() == userName) {
+        std::cout << "find it 2" << std::endl;
       this->operators.erase(it1);
       return;
     }
@@ -201,6 +203,25 @@ bool Channel::isMember(std::string const & ClientName) {
         }
     }
     return false;
+}
+
+
+void Channel::send_reply(int cfd, std::string const & message) {
+    std::string reply = message + "\r\n";
+    ssize_t byte_sent  = send(cfd, reply.c_str(), reply.length(), 0);
+    if(byte_sent == -1) {
+        std::cerr << "Error sending reply: " << strerror(errno) << std::endl;
+    }
+}
+
+ void Channel::broadcast(std::string message) {
+     for (size_t i = 0; i < users.size(); ++i) {
+        send_reply(this->users[i].getClientFd(), message);
+     }
+
+     for(size_t j = 0; j < operators.size(); ++j) {
+        send_reply(this->operators[j].getClientFd(), message);
+     }
 }
 
 // // Remove client from users vector

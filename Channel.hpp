@@ -52,6 +52,8 @@ class Channel {
 
         void sendMessageToChannel(my_server& server, std::string message , int index);
         void deleteUser(std::string const & userName);
+        void send_reply(int cfd, std::string const & message);
+        void broadcast(std::string message);
         // void receiveMessage(std::string const & message);
 
         // check if the client if invited to the channel
@@ -59,7 +61,6 @@ class Channel {
         void addClientToChannel(const client newClient);
       //   void deleteClientFromChannel(client newClient);
         bool isClientInChannel(Channel channel);
-        void broadcast(std::string message);
         bool isOperator(client newClient);
         bool isInviteOn();
 
