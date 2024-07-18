@@ -2,6 +2,7 @@
 
 client::client() 
     : client_fd(-1), 
+      hexChat(false),
       realname(""), 
       username(""), 
       hostname(""), 
@@ -53,8 +54,14 @@ void client::setReg2(bool of) {
 void client::setReg(bool of) {
     Alreadyregistred = of;
 }
+void client::sethexChat(bool of) {
+    hexChat = of;
+}
 
 
+bool client::getHexChat() {
+    return hexChat;
+}
 // bool client::getFirst() {
 //     return _first;
 // }

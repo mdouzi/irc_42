@@ -11,6 +11,11 @@
 
 my_server::my_server() {};
 my_server::~my_server() {};
+
+void my_server::LIST() {
+  
+}
+
 void my_server::runServer(wint_t port) {
     char buff[255];
     int sockfd = createSocket();
@@ -175,15 +180,11 @@ void my_server::handleClientCommands(int cfd, int index)
     }
     else if (this->input[0] == "KICK" || this->input[0] == "kick")
     {
-      std::cout << "###########"<< std::endl;
-      for(size_t i = 0; i < this->input.size(); i++) {
-        std::cout << "this is input =>" << this->input[i] << " " << std::endl;
-      }
-      std::cout << "###########" << std::endl;
-
      if(this->clients[index].getAuth() == true) {
-        if(this->clients[index].getReg2() == true) {
+        if(this->clients[index].getReg2() == true && this->clients[index].getHexChat() == false) {
           kick((*this), index);
+        } else if(this->clients[index].getReg2() == true && this->clients[index].getHexChat() == true) {
+          kick_hex((*this), index);
         } else {
           send_reply(cfd, "KICK : ERR_NOTREGISTERED :You may not registered");
         }

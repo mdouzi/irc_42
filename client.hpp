@@ -8,6 +8,7 @@ class client {
 
     private:
         int client_fd;
+        bool hexChat;
         std::string realname;
         std::string username;
         std::string hostname;
@@ -19,6 +20,7 @@ class client {
     public:
         client();
         ~client();
+       void sethexChat(bool of);
        void setNickName(std::string const & str);
        void setRealName(std::string const & str);
        void setHostName(std::string const & str);
@@ -35,6 +37,7 @@ class client {
         std::string const &getServerName();
         std::string const &getUserName();
 
+        bool getHexChat();
         bool getAuth();
         bool getReg();
         bool getReg2();

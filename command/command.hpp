@@ -19,4 +19,5 @@ void hexchat(my_server& server, int index);
 void kick(my_server& server, int index);
 void topic(my_server& server, int index);
 void invite(my_server& server, int index);
+void kick_hex(my_server & server, int index);
 #endif 

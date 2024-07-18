@@ -35,6 +35,7 @@ class my_server {
       void runServer(wint_t port);
       void handleClientCommands(int cfd, int index);
       void SplitInput(char buffer[255], std::vector<std::string> &tokens);
+      void LIST();
 
       void setPassword(std::string const & password);
 
