@@ -1,6 +1,7 @@
 #include "command.hpp"
 void privmsg(my_server& server, int index) {
     bool found = false;
+    bool userFound = false;
     int channelIndex = 0;
 
     if (server.input.size() < 3) {
@@ -27,8 +28,19 @@ void privmsg(my_server& server, int index) {
                     channelIndex = i;
                     break;
                 }
+                for (size_t j = 0; j < server.channels[i].getUsers().size(); j++) {
+                    if (server.channels[i].getUsers()[j].getNickName() == sender) {
+                        userFound = true;
+                        channelIndex = i;
+                        break;
+                    }
+                }
             }
             if (found) {
+                if (!userFound) {
+                    server.send_reply(server.clients[index].getClientFd(), "PRIVMSG : ERR_NOTONCHANNEL :You're not on that channel");
+                    return;
+                }
                 server.channels[channelIndex].sendMessageToChannel(server, message, index);
                 std::cout << "PRIVMSG command executed" << std::endl;
                 std::cout << "Client " << server.clients[index].getClientFd() << " sent message to channel " << server.channels[channelIndex].getName() << std::endl;

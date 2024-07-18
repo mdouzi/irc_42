@@ -191,6 +191,16 @@ void my_server::handleClientCommands(int cfd, int index)
      } else {
         send_reply(cfd, "KICK : ERR_NOTREGISTERED :You have not registered");
      }
+    } else if (this->input[0] == "LIST" || this->input[0] == "list") {
+      if (this->clients[index].getAuth() == true) {
+        if (this->clients[index].getReg2() == true) {
+          list((*this), index);
+        } else {
+          send_reply(cfd, "LIST : ERR_NOTREGISTERED :You may not registered");
+        }
+      } else {
+        send_reply(cfd, "LIST : ERR_NOTREGISTERED :You have not registered");
+      }
     }
   }
 }
