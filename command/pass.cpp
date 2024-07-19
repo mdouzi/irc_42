@@ -12,11 +12,10 @@ void send_reply_pass(int cfd, std::string const & message)
 
 
 void pass(my_server& server, int index) {
-        std::cout << "Command received: PASS\n";
+
 	if (!strncmp(server.input[1].c_str(), server.getPassword().c_str(), server.getPassword().size())){
 		send_reply_pass(server.clients[index].getClientFd() , "------>   Welcome ;D  <------ ");
 		server.clients[index].setAuth(true);
-		std::cout << "COMMAND PASS {DONE}" << std::endl;
 		if (2 < server.input.size()) {
             server.input.erase(server.input.begin(), server.input.begin() + 2);
         }

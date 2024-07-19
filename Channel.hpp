@@ -37,7 +37,6 @@ class Channel {
         
         std::vector<client> &getUsers() ;
         std::vector<client> &getOperators() ;
-        // std::vector<client> const &getInvitedClients() const;
         bool getTopicRestricted();
 
 
@@ -54,12 +53,9 @@ class Channel {
         void deleteUser(std::string const & userName);
         void send_reply(int cfd, std::string const & message);
         void broadcast(std::string message);
-        // void receiveMessage(std::string const & message);
 
-        // check if the client if invited to the channel
         bool isInvited(client newClient);
         void addClientToChannel(const client newClient);
-      //   void deleteClientFromChannel(client newClient);
         bool isClientInChannel(Channel channel);
         bool isOperator(client newClient);
         bool isInviteOn();

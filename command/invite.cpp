@@ -1,6 +1,5 @@
 #include "command.hpp"
 
-// handle invite command
 void invite(my_server &server, int index) {
     if (server.input.size() < 3) {
         server.send_reply(server.clients[index].getClientFd(), "INVITE : ERR_NEEDMOREPARAMS :Not enough parameters");

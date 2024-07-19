@@ -27,7 +27,6 @@ void user(my_server &server, int index) {
         }
         //std::remove(tempRealName.begin(), tempRealName.end(), ':');
         server.clients[index].setRealName(tempRealName);
-        std::cout << server.clients[index].getRealName() << std::endl;
         send_reply_user(server.clients[index].getClientFd() , "----> USER COMMAND SUCCESSFUL <----");
         if (2 < server.input.size()) {
             server.input.erase(server.input.begin(), server.input.begin() + 2);

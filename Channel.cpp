@@ -1,54 +1,42 @@
 #include "Channel.hpp"
 #include <sys/types.h>
 #include <sys/socket.h>
-// Default constructor
+
 Channel::Channel() {
-    // Initialize members if needed
 }
 
-// Constructor with specified parameters
 Channel::Channel(std::string name, std::string topic, client op, std::string password)
     : name(name), topic(topic), password(password) {
     operators.push_back(op); // Add operator to operators vector
 }
 
-// Constructor without password and operator
 Channel::Channel(std::string name, std::string topic)
     : name(name), topic(topic) {
         _isInviteOnly = false;
         _isLimited = false;
         _isTopicRestricted = false;
         _limit = 0;
-        std::cout << " >>>>>>>   Channel created <<<<<<<<  " << std::endl;
-    // Initialize members
 }
 
-// Destructor
 Channel::~Channel() {
-    // Clean up if needed
 }
 
-// Getter for topic
 bool Channel::getTopicRestricted() {
     return _isTopicRestricted;
 }
 
-// Getter for mode
 std::string const & Channel::getMode() const {
     return mode;
 }
 
-// Getter for name
 std::string const & Channel::getName() const {
     return name;
 }
 
-// Getter for topic
 std::string const & Channel::getTopic() const {
     return topic;
 }
 
-// Getter for password
 std::string const & Channel::getPassword() const {
     return password;
 }
@@ -80,8 +68,6 @@ void Channel::setInvitedClients(client newClient) {
 
 // setter for Limited
 void Channel::setLimited(bool isLimited, int limit) {
-    std::cout << isLimited << " Limited" << limit << std::endl;
-    std::cout << limit << "   limit" << std::endl;
     _isLimited = isLimited;
     _limit = limit;
 }
@@ -103,7 +89,6 @@ void Channel::setMode(std::string const & str) {
 
 // setter for InviteOnly
 void Channel::setInviteOnly(bool isInviteOnly) {
-    std::cout << "hahwa HSAAAAAAAAALLLLLLLL " << std::endl;
     _isInviteOnly = isInviteOnly;
 }
 
@@ -162,7 +147,6 @@ void Channel::deleteUser(std::string const & userName)
 
   for(std::vector<client>::iterator it1 = this->operators.begin(); it1 != this->operators.end(); it1++) {
     if(it1->getNickName() == userName) {
-        std::cout << "find it 2" << std::endl;
       this->operators.erase(it1);
       return;
     }

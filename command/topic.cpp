@@ -15,8 +15,6 @@ void topic(my_server& server, int index) {
             newTopic += " ";
         }
     }
-    std::cout << "channelName: " << channelName << std::endl;
-    std::cout << "newTopic: " << newTopic << std::endl;
 
     bool found = false;
     int idx = 0;
