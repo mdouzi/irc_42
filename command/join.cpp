@@ -53,7 +53,7 @@ void join(my_server& server, int index) {
 
             // Send names list to all clients in the channel
             for (size_t i = 0; i < server.channels[idx].getUsers().size(); ++i) {
-                std::string namesList = ":zaba.org 353 " + server.channels[idx].getUsers()[i].getNickName() + " = " + channelName + " :";
+                std::string namesList = ":fullhaha.irc.com 353 " + server.channels[idx].getUsers()[i].getNickName() + " = " + channelName + " :";
                 for (size_t j = 0; j < server.channels[idx].getUsers().size(); ++j) {
                     if (j > 0) namesList += " ";
                     if (server.channels[idx].isOperator(server.channels[idx].getUsers()[j])) {
@@ -64,7 +64,7 @@ void join(my_server& server, int index) {
                 server.send_reply(server.channels[idx].getUsers()[i].getClientFd(), namesList);
 
                 // Send end of names list to the client
-                std::string endNames = ":zaba.org 366 " + server.channels[idx].getUsers()[i].getNickName() + " " + channelName + " :End of /NAMES list.";
+                std::string endNames = ":fullhaha.irc.com 366 " + server.channels[idx].getUsers()[i].getNickName() + " " + channelName + " :End of /NAMES list.";
                 server.send_reply(server.channels[idx].getUsers()[i].getClientFd(), endNames);
             }
 
@@ -81,12 +81,12 @@ void join(my_server& server, int index) {
             server.send_reply(server.clients[index].getClientFd(), channelinfo);
 
             // Send names list to the client
-            std::string namesList = ":zaba.org 353 " + server.clients[index].getNickName() + " = " + channelName + " :@" + server.clients[index].getNickName();
+            std::string namesList = ":fullhaha.irc.com 353 " + server.clients[index].getNickName() + " = " + channelName + " :@" + server.clients[index].getNickName();
             server.send_reply(server.clients[index].getClientFd(), namesList);
             std::cout << "JOIN : namesList: " << namesList << std::endl;
 
             // Send end of names list to the client
-            std::string endNames = ":zaba.org 366 " + server.clients[index].getNickName() + " " + channelName + " :End of /NAMES list.";
+            std::string endNames = ":fullhaha.irc.com 366 " + server.clients[index].getNickName() + " " + channelName + " :End of /NAMES list.";
             server.send_reply(server.clients[index].getClientFd(), endNames);
         }
     } else {

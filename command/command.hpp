@@ -8,6 +8,9 @@
 #include <unistd.h>
 #include "../Channel.hpp"
 #include "../client.hpp"
+#include <sstream>
+
+#define USERLEN 10
 
 void pass(my_server& server, int index);
 void user(my_server& server, int index);

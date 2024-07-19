@@ -47,7 +47,7 @@ void mode(my_server& server, int index) {
                 } else if (mode == "i") {
                     if (add_remove == "+") {
                         server.channels[idx].setInviteOnly(true);
-                        server.send_reply(server.clients[index].getClientFd(), ":zaba.org 324 " + server.clients[index].getNickName() + " " + server.channels[idx].getName() + " +" + mode);
+                        server.send_reply(server.clients[index].getClientFd(), ":fullhaha.irc.com 324 " + server.clients[index].getNickName() + " " + server.channels[idx].getName() + " +" + mode);
                     } else if (add_remove == "-") {
                         server.channels[idx].setInviteOnly(false);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
@@ -64,7 +64,7 @@ void mode(my_server& server, int index) {
                     if (add_remove == "+") {
                         server.channels[idx].addOperator(argOfTheMode);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
-                        std::string namesList = ":zaba.org 353 " + server.clients[index].getNickName() + " = " + channelName + " :";
+                        std::string namesList = ":fullhaha.irc.com 353 " + server.clients[index].getNickName() + " = " + channelName + " :";
                         for (size_t i = 0; i < server.channels[idx].getUsers().size(); ++i) {
                             if (i > 0) {
                                 namesList += " ";
@@ -77,7 +77,7 @@ void mode(my_server& server, int index) {
                             // namesList += "@" + server.channels[idx].getOperators()[i].getNickName();
                         }
 
-                        std::string endNames = ":zaba.org 366 " + server.clients[index].getNickName() + " " + channelName + " :End of /NAMES list.";
+                        std::string endNames = ":fullhaha.irc.com 366 " + server.clients[index].getNickName() + " " + channelName + " :End of /NAMES list.";
 
                         for (size_t i = 0; i < server.channels[idx].getUsers().size(); ++i) {
                             server.send_reply(server.channels[idx].getUsers()[i].getClientFd(), namesList);
@@ -87,7 +87,7 @@ void mode(my_server& server, int index) {
                         server.channels[idx].removeOperator(argOfTheMode);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
 
-                        std::string namesList = ":zaba.org 353 " + server.clients[index].getNickName() + " = " + channelName + " :";
+                        std::string namesList = ":fullhaha.irc.com 353 " + server.clients[index].getNickName() + " = " + channelName + " :";
 
                         for (size_t i = 0; i < server.channels[idx].getUsers().size(); ++i) {
                             if (i > 0) {
@@ -100,7 +100,7 @@ void mode(my_server& server, int index) {
                                 namesList += server.channels[idx].getUsers()[i].getNickName();
                         }
 
-                        std::string endNames = ":zaba.org 366 " + server.clients[index].getNickName() + " " + channelName + " :End of /NAMES list.";
+                        std::string endNames = ":fullhaha.irc.com 366 " + server.clients[index].getNickName() + " " + channelName + " :End of /NAMES list.";
                         
                         for (size_t i = 0; i < server.channels[idx].getUsers().size(); ++i) {
                             server.send_reply(server.channels[idx].getUsers()[i].getClientFd(), namesList);

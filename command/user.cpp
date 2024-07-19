@@ -1,7 +1,11 @@
 #include "command.hpp"
 #include "../client.hpp"
 
-
+std::string intToString(int value) {
+    std::stringstream ss;
+    ss << value;
+    return ss.str();
+}
 
 void send_reply_user(int cfd, std::string const & message)
 {
@@ -18,6 +22,9 @@ void user(my_server &server, int index) {
         send_reply_user(server.clients[index].getClientFd(), "ERROR: USER <username> <hostname> <servername> <realname>\n");
         server.clients[index].setReg(false);
     } else {
+        if (server.input[1].length() > USERLEN) {
+            send_reply_user(server.clients[index].getClientFd(), "ERROR: Maximum USERLEN is " + intToString(USERLEN) + "\n");
+        }
         server.clients[index].setUserName(server.input[1]);
 		server.clients[index].setHostName(server.input[2]);
         server.clients[index].setServerName(server.input[3]);
