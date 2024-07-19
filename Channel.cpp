@@ -56,6 +56,16 @@ bool Channel::isInvited(client newClient) {
     return false;
 }
 
+// have password
+void Channel::setHavePassword(bool havePassword) {
+    _havePassword = havePassword;
+}
+
+// is have a password
+bool Channel::isHavePassword() {
+    return _havePassword;
+}
+
 // isInviteOnly
 bool Channel::isInviteOn() {
     return _isInviteOnly;

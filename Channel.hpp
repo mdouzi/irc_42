@@ -48,6 +48,7 @@ class Channel {
         void setTopicRestricted(bool isTopicRestricted);
         void setLimited(bool isLimited, int limit);
         void setInvitedClients(client newClient);
+        void setHavePassword(bool havePassword);
 
         void sendMessageToChannel(my_server& server, std::string message , int index);
         void deleteUser(std::string const & userName);
@@ -59,6 +60,7 @@ class Channel {
         bool isClientInChannel(Channel channel);
         bool isOperator(client newClient);
         bool isInviteOn();
+        bool isHavePassword();
 
         bool isMember(std::string const & ClientName);
         void addOperator(std::string newClient);

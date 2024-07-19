@@ -3,6 +3,7 @@
 void join(my_server& server, int index) {
     bool found = false;
     int idx = 0;
+    std::string key;
 
     if (server.input.size() < 2) {
         server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_NEEDMOREPARAMS :Not enough parameters");
@@ -10,9 +11,12 @@ void join(my_server& server, int index) {
     }
 
     std::string channelName = server.input[1];
+    if (server.input.size() == 3) {
+         key = server.input[2];
+    }
     if (channelName[0] == '#') {
         // Check if the channel already exists
-        for (size_t i = 0; i < server.channels.size(); ++i) {
+        for (size_t i = 0; i < server.channels.size(); ++i) { 
             if (server.channels[i].getName() == channelName) {
                 found = true;
                 idx = i;
@@ -21,15 +25,25 @@ void join(my_server& server, int index) {
         }
 
         if (found) {
-            if (server.channels[idx].isInviteOn() && !server.channels[idx].isInvited(server.clients[index])) {
+            // check if have password
+            if (server.channels[idx].isHavePassword() ) {
+                if (server.channels[idx].getPassword() != key) {
+                    server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_BADCHANNELKEY :Cannot join channel because of wrong password");
+                    return;
+                } else {
+                        if (server.channels[idx].getPassword() == key) {
+                            server.channels[idx].addClientToChannel(server.clients[index]);
+                    }
+                }
+            } else if (server.channels[idx].isInviteOn() && !server.channels[idx].isInvited(server.clients[index])) {
                 server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_INVITEONLYCHAN :Cannot join channel because it is invite only");
                 return;
-            }
-            if (server.channels[idx].getLimit() != 0 && server.channels[idx].getLimit() <= server.channels[idx].getUsers().size()) {
+            } else if (server.channels[idx].getLimit() != 0 && server.channels[idx].getLimit() <= server.channels[idx].getUsers().size()) {
                 server.send_reply(server.clients[index].getClientFd(), "JOIN : ERR_CHANNELISFULL :Cannot join channel because it is full");
                 return;
+            } else {
+                server.channels[idx].addClientToChannel(server.clients[index]);
             }
-            server.channels[idx].addClientToChannel(server.clients[index]);
 
             // Notify all users in the channel about the new user
             std::string joinMessage = ":" + server.clients[index].getNickName() + "!" + server.clients[index].getUserName() + " JOIN " + channelName;

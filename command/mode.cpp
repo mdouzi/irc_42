@@ -21,7 +21,13 @@ void mode(my_server& server, int index) {
         }
         if (found) {
             server.channels[idx].setMode(mode);
-            if (server.channels[idx].isMember(server.clients[idx].getNickName()) == false) {
+            for (size_t i = 0; i < server.channels[idx].getUsers().size(); ++i) {
+                if (server.channels[idx].getUsers()[i].getNickName() == server.clients[index].getNickName()) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found == false) {
                 server.send_reply(server.clients[index].getClientFd(), "MODE : ERR_NOTONCHANNEL :You're not on that channel");
                 return;
             }
@@ -103,9 +109,11 @@ void mode(my_server& server, int index) {
                     }
                 } else if (mode == "k")  {
                     if (add_remove == "+") {
+                        server.channels[idx].setHavePassword(true);
                         server.channels[idx].setPassword(argOfTheMode);
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
                     } else if (add_remove == "-") {
+                        server.channels[idx].setHavePassword(false);
                         server.channels[idx].setPassword("");
                         server.send_reply(server.clients[index].getClientFd(), "MODE :You have set the mode of the channel");
                     }
