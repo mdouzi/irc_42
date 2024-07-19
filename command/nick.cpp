@@ -41,6 +41,10 @@ bool isValidNickName(const std::string& nick)
 
 
 void nick(my_server& server , int index) {
+    if(server.input.size() < 2) {
+      send_reply_nick(server.clients[index].getClientFd(), "NICK : ERR_NONICKNAMEGIVEN (431) : No nickname given");
+      return;
+    }
     if(!isUniqueNickName(server.input[1], server))
     {
       send_reply_nick(server.clients[index].getClientFd(), "NICK : ERR_NICKNAMEINUSE (433) : Nickname is already in use");

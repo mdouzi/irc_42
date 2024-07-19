@@ -17,8 +17,8 @@ void kick(my_server & server, int index) {
     // Check and extract channel name
     if (server.input.size() > 1 && server.input[1][0] == '#' && server.input[1].size() > 1) {
         channelName = server.input[1];
-        channelName.erase(0, channelName.find_first_not_of(" \t\n\r\f\v")); // trim leading spaces
-        channelName.erase(channelName.find_last_not_of(" \t\n\r\f\v") + 1); // trim trailing spaces
+        channelName.erase(0, channelName.find_first_not_of(" \t\n\r\f\v")); 
+        channelName.erase(channelName.find_last_not_of(" \t\n\r\f\v") + 1); 
     } else {
         send_reply(server.clients[index].getClientFd(), "KICK : ERR_NOSUCHCHANNEL :No such channel");
         return;
@@ -27,8 +27,8 @@ void kick(my_server & server, int index) {
     // Check and extract user name
     if (server.input.size() > 2 && server.input[2].size() > 1) {
         userName = server.input[2];
-        userName.erase(0, userName.find_first_not_of(" \t\n\r\f\v")); // trim leading spaces
-        userName.erase(userName.find_last_not_of(" \t\n\r\f\v") + 1); // trim trailing spaces
+        userName.erase(0, userName.find_first_not_of(" \t\n\r\f\v")); 
+        userName.erase(userName.find_last_not_of(" \t\n\r\f\v") + 1); 
     } else {
         send_reply(server.clients[index].getClientFd(), "KICK : ERR_NOSUCHNICK :No such nick/channel");
         return;
@@ -78,7 +78,7 @@ void kick(my_server & server, int index) {
     }
 }
 
-// for hexchat (+1 arg (netwrok name))
+// for hexchat (+1 arg (network name))
 void kick_hex(my_server & server, int index) {
     std::string channelName;
     std::string userName;
@@ -89,8 +89,8 @@ void kick_hex(my_server & server, int index) {
     // Check and extract channel name
     if (server.input.size() > 1 && server.input[2][0] == '#' && server.input[2].size() > 1) {
         channelName = server.input[2];
-        channelName.erase(0, channelName.find_first_not_of(" \t\n\r\f\v")); // trim leading spaces
-        channelName.erase(channelName.find_last_not_of(" \t\n\r\f\v") + 1); // trim trailing spaces
+        channelName.erase(0, channelName.find_first_not_of(" \t\n\r\f\v"));
+        channelName.erase(channelName.find_last_not_of(" \t\n\r\f\v") + 1);
     } else {
         send_reply(server.clients[index].getClientFd(), "KICK : ERR_NOSUCHCHANNEL :No such channel");
         return;
@@ -99,8 +99,8 @@ void kick_hex(my_server & server, int index) {
     // Check and extract user name
     if (server.input.size() > 2 && server.input[3].size() > 1) {
         userName = server.input[3].substr(1);
-        userName.erase(0, userName.find_first_not_of(" \t\n\r\f\v")); // trim leading spaces
-        userName.erase(userName.find_last_not_of(" \t\n\r\f\v") + 1); // trim trailing spaces
+        userName.erase(0, userName.find_first_not_of(" \t\n\r\f\v"));
+        userName.erase(userName.find_last_not_of(" \t\n\r\f\v") + 1);
     } else {
         send_reply(server.clients[index].getClientFd(), "KICK : ERR_NOSUCHNICK :No such nick/channel");
         return;

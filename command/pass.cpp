@@ -12,8 +12,10 @@ void send_reply_pass(int cfd, std::string const & message)
 
 
 void pass(my_server& server, int index) {
-
-	if (!strncmp(server.input[1].c_str(), server.getPassword().c_str(), server.getPassword().size())){
+	if(server.input.size() < 2)
+	{
+		send_reply_pass(server.clients[index].getClientFd(), "----->  Incorrect password !! <-----");
+	} else if (!strncmp(server.input[1].c_str(), server.getPassword().c_str(), server.getPassword().size())){
 		send_reply_pass(server.clients[index].getClientFd() , "------>   Welcome ;D  <------ ");
 		server.clients[index].setAuth(true);
 		if (2 < server.input.size()) {

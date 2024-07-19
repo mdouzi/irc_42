@@ -218,31 +218,6 @@ void Channel::send_reply(int cfd, std::string const & message) {
      }
 }
 
-// // Remove client from users vector
-//  void Channel::deleteClientFromChannel(client newClient) {
-//      for (size_t i = 0; i < users.size(); ++i) {
-//          if (users[i].getNickName() == newClient.getNickName()) {
-//              users.erase(users.begin() + i);
-//              break;
-//          }
-//      }
-//  }
 
-// // Check if a client (by name) is in the channel
-//  bool Channel::isClientInChannel(my_server server, std::string name) {
-//      for (size_t i = 0; i < users.size(); ++i) {
-//          if ( == name) {
-//              return true;
-//          }
-//      }
-//      return false;
-//  }
-
-// // Broadcast a message to all clients in the channel (not used)
-//  void Channel::broadcast(std::string message) {
-//      for (size_t i = 0; i < users.size(); ++i) {
-//          users[i].receiveMessage(message);
-//      }
-// }
 
 
