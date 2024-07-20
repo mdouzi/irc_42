@@ -17,11 +17,11 @@ void privmsg(my_server& server, int index) {
             message += server.input[i] + " ";
         }
         if (!message.empty()) {
-            message.erase(message.size() - 1); // Remove trailing space
+            message.erase(message.size() - 1);
         }
 
         if (receiver[0] == '#') {
-            // Handle channel message
+
             for (size_t i = 0; i < server.channels.size(); i++) {
                 if (server.channels[i].getName() == receiver) {
                     found = true;
@@ -45,7 +45,7 @@ void privmsg(my_server& server, int index) {
                 server.send_reply(server.clients[index].getClientFd(), "PRIVMSG : ERR_NOSUCHCHANNEL :No such channel");
             }
         } else {
-            // Handle direct message
+
             int recIndex = 0;
             for (size_t i = 0; i < server.clients.size(); i++) {
                 if (server.clients[i].getNickName() == receiver) {
@@ -55,7 +55,7 @@ void privmsg(my_server& server, int index) {
                 }
             }
             if (found) {
-                // Check for previous conversation
+ 
                 std::map<std::string, std::vector<std::string> >::iterator it = server.conversations.find(sender);
                 if (it != server.conversations.end()) {
                     std::vector<std::string>::iterator vecIt;
@@ -68,13 +68,13 @@ void privmsg(my_server& server, int index) {
                 }
 
                 if (!friends) {
-                    // New conversation
+
                     server.conversations[sender].push_back(receiver);
                     server.conversations[receiver].push_back(sender); // Assuming bi-directional conversation
                     server.send_reply(server.clients[recIndex].getClientFd(), ":" + sender + "!" + sender + "@0.0.0.0" + " PRIVMSG " + receiver + " :" + message);
                     server.send_reply(server.clients[index].getClientFd(), "PRIVMSG " + receiver + " :" + message);
                 } else {
-                    // Existing conversation
+
                     server.send_reply(server.clients[recIndex].getClientFd(), ":" + sender + "!" + sender + "@0.0.0.0" + " PRIVMSG " + receiver + " :" + message);
                 }
             } else {

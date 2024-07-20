@@ -31,7 +31,6 @@ void invite(my_server &server, int index) {
         else {
             for (size_t i = 0; i < server.clients.size(); ++i) {
                 if (server.clients[i].getNickName() == nickName) {
-                    // set the client as invited
                     server.channels[idx].setInvitedClients(server.clients[i]);
                     server.send_reply(server.clients[i].getClientFd(), ":" + server.clients[index].getNickName() + " INVITE " + nickName + " " + channelName);
                     server.send_reply(server.clients[index].getClientFd(), "INVITE :You have invited " + nickName + " to " + channelName);

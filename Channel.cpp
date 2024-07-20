@@ -7,7 +7,7 @@ Channel::Channel() {
 
 Channel::Channel(std::string name, std::string topic, client op, std::string password)
     : name(name), topic(topic), password(password) {
-    operators.push_back(op); // Add operator to operators vector
+    operators.push_back(op);
 }
 
 Channel::Channel(std::string name, std::string topic)
@@ -41,12 +41,12 @@ std::string const & Channel::getPassword() const {
     return password;
 }
 
-// Getter for users vector
+
 std::vector<client> & Channel::getUsers() {
     return users;
 }
 
-// check if the client is invited to the channel
+
 bool Channel::isInvited(client newClient) {
     for (size_t i = 0; i < invited.size(); ++i) {
         if (invited[i].getNickName() == newClient.getNickName()) {
@@ -56,73 +56,63 @@ bool Channel::isInvited(client newClient) {
     return false;
 }
 
-// have password
+
 void Channel::setHavePassword(bool havePassword) {
     _havePassword = havePassword;
 }
 
-// is have a password
 bool Channel::isHavePassword() {
     return _havePassword;
 }
 
-// isInviteOnly
+
 bool Channel::isInviteOn() {
     return _isInviteOnly;
 }
 
-// setter for invited clients
+
 void Channel::setInvitedClients(client newClient) {
     invited.push_back(newClient);
 }
 
-// setter for Limited
+
 void Channel::setLimited(bool isLimited, int limit) {
     _isLimited = isLimited;
     _limit = limit;
 }
 
-// setter for TopicRestricted
 void Channel::setTopicRestricted(bool isTopicRestricted) {
     _isTopicRestricted = isTopicRestricted;
 }
 
-// getter for Limited
 size_t Channel::getLimit() const {
     return _limit;
 }
 
-// setter for Mode
 void Channel::setMode(std::string const & str) {
     mode = str;
 }
 
-// setter for InviteOnly
 void Channel::setInviteOnly(bool isInviteOnly) {
     _isInviteOnly = isInviteOnly;
 }
 
-// Setter for name
 void Channel::setName(std::string const & str) {
     name = str;
 }
 
-// Setter for topic
 void Channel::setTopic(std::string const & str) {
     topic = str;
 }
 
-// Setter for password
 void Channel::setPassword(std::string const & str) {
     password = str;
 }
 
-// Add client to users vector
 void Channel::addClientToChannel(const client newClient) {
     this->users.push_back(newClient);
 }
 
-// Send message to all clients in the channel
 void Channel::sendMessageToChannel(my_server& server, std::string message, int index) {
     std::string messageToSend = ":" + server.clients[index].getNickName() + "!" + server.clients[index].getUserName() + " PRIVMSG " + this->name + " :" + message;
 
@@ -130,13 +120,11 @@ void Channel::sendMessageToChannel(my_server& server, std::string message, int i
         if (this->users[i].getNickName() != server.clients[index].getNickName()) {
             server.send_reply(this->users[i].getClientFd(), messageToSend);
         }
-        // server.send_reply(this->users[i].getClientFd(), message);
+    
     }
 }
 
-// :dan!~h@localhost PRIVMSG #coolpeople :Hi everyone!
 
-// remove operator
 void Channel::removeOperator(std::string newClient) {
     for (size_t i = 0; i < operators.size(); ++i) {
         if (operators[i].getNickName() == newClient) {
@@ -163,7 +151,6 @@ void Channel::deleteUser(std::string const & userName)
   }
 }
 
-// Set operator
 void Channel::addOperator(std::string newClient) {
     for (size_t i = 0; i < users.size(); ++i) {
         if (users[i].getNickName() == newClient) {
@@ -171,10 +158,9 @@ void Channel::addOperator(std::string newClient) {
             break;
         }
     }
-    // operators.push_back(newClient);
+
 }
 
-// Check if a client is an operator
 bool Channel::isOperator(client newClient) {
      for (size_t i = 0; i < operators.size(); ++i) {
          if (operators[i].getNickName() == newClient.getNickName()) {
@@ -184,12 +170,10 @@ bool Channel::isOperator(client newClient) {
      return false;
 }
 
-// getter fors
 std::vector<client> & Channel::getOperators() {
     return operators;
 }
 
-// Check if a client is a member of the channel
 bool Channel::isMember(std::string const & ClientName) {
     for (size_t i = 0; i < users.size(); ++i) {
         if (users[i].getNickName() == ClientName) {

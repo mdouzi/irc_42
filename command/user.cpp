@@ -32,7 +32,6 @@ void user(my_server &server, int index) {
         if (server.input.size() > 5) {
             tempRealName += server.input[5];
         }
-        //std::remove(tempRealName.begin(), tempRealName.end(), ':');
         server.clients[index].setRealName(tempRealName);
         send_reply_user(server.clients[index].getClientFd() , "----> USER COMMAND SUCCESSFUL <----");
         if (2 < server.input.size()) {

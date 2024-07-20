@@ -63,7 +63,6 @@ void my_server::runServer(wint_t port) {
                     SplitInput(buff, this->input);
                     handleClientCommands(this->_mypolls[i].fd, (i - 1));
                     this->input.clear();
-                    std::cout << buff;
                     memset(buff, 0, 255);
                 }
             }

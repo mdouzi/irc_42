@@ -58,9 +58,6 @@ void client::sethexChat(bool of) {
 bool client::getHexChat() {
     return hexChat;
 }
-// bool client::getFirst() {
-//     return _first;
-// }
 
 std::string const &client::getNickName() {
     return nickname;
